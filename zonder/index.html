@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Zonder Paperclip · CycladesGo</title>
+<style>
+  :root{
+    --bg:#FAF7F2; --surface:#fff;
+    --ink:#0D2B4A; --soft:#46617D; --muted:#55697D; --border:#D9E2E9;
+    --aegean:#1268B3; --aegean-bg:#E8F1F9; --sea:#0E8A8F; --sea-bg:#E4F2F2;
+    --sun:#E8A33C; --sun-ink:#8A5B12; --sun-bg:#FBF3E2;
+    --olive:#4C7A34; --olive-bg:#E9F2E3;
+    --terra:#A8441F; --terra-bg:#F9EAE4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .slide{position:relative;width:1600px;height:900px;padding:60px 76px 74px;overflow:hidden;
+    page-break-after:always;margin:0 auto 24px;border-bottom:1px solid var(--border)}
+  .slide::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(900px 420px at 90% -10%,rgba(18,104,179,.07),transparent 60%),
+               radial-gradient(700px 360px at -8% 110%,rgba(232,163,60,.10),transparent 60%)}
+  .slide>*{position:relative;z-index:1}
+  .eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--aegean);font-weight:800}
+  h1{font-size:46px;line-height:1.05;letter-spacing:-.03em;margin:10px 0 0;font-weight:800}
+  h2{font-size:36px;letter-spacing:-.02em;margin:8px 0 0;font-weight:800}
+  .lede{font-size:19px;line-height:1.45;color:var(--soft);max-width:1120px;margin-top:10px}
+  .foot{position:absolute;left:76px;right:76px;bottom:26px;display:flex;justify-content:space-between;
+    font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:#8194A6;
+    border-top:1px solid var(--border);padding-top:9px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .tag{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+  /* ribbon */
+  .ribbon{display:grid;grid-template-columns:repeat(5,1fr);gap:26px;margin-top:34px;position:relative}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px 15px;
+    box-shadow:0 1px 1px rgba(20,48,77,.07),0 8px 24px rgba(20,48,77,.06);position:relative;min-height:198px}
+  .step .n{width:26px;height:26px;border-radius:8px;background:var(--aegean-bg);color:var(--aegean);
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .step h3{margin:0;font-size:18px;letter-spacing:-.01em}
+  .step p{margin:6px 0 0;font-size:13.5px;line-height:1.5;color:var(--soft)}
+  .step .who{position:absolute;right:16px;top:16px;font-size:10px;font-weight:800;letter-spacing:.1em;
+    text-transform:uppercase;color:#93A5B6}
+  .step.ops{border-color:#B9D3E8;background:linear-gradient(180deg,#fff,#F4F9FD)}
+  .step.do{border-color:#E4D2AC;background:#FFFDF8}
+  .step.pr{border-color:#C9DCC0;background:#FCFEF9}
+  .step.you{background:var(--ink);border-color:var(--ink);color:#fff}
+  .step.you h3{color:#fff}
+  .step.you p{color:#C4D2DF}
+  .step.you .who{color:#8FA3B5}
+  .step.you .n{background:#1E3E5C;color:#fff}
+  .step:not(:last-child)::after{content:"›";position:absolute;right:-22px;top:50%;transform:translateY(-50%);
+    color:#A9B8C6;font-size:18px;z-index:2}
+  .ex{display:flex;align-items:center;gap:10px;margin-top:20px;padding:13px 18px;border:1px solid var(--border);
+    border-radius:12px;background:var(--surface);font-size:13.5px;color:var(--soft);
+    box-shadow:0 1px 1px rgba(20,48,77,.06)}
+  .ex b{color:var(--ink)}
+  .ex .sep{color:#A9B8C6}
+  .sep{color:#A9B8C6}
+  .close{margin-top:38px;display:flex;gap:14px;align-items:center;font-size:20px;font-weight:700;color:var(--ink)}
+  .close .r{width:44px;height:3px;background:var(--sun);border-radius:2px;flex:0 0 auto}
+  .arrow-r{position:absolute;top:50%;transform:translateY(-50%);font-size:20px;color:#A9B8C6}
+  .flow{position:absolute;inset:0;pointer-events:none}
+  .return{margin-top:16px;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}
+  .return .line{flex:1;height:1px;background:repeating-linear-gradient(90deg,#C3D0DA 0 6px,transparent 6px 12px)}
+  .return .lbl{font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px;color:var(--muted)}
+
+  .replace{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+  .rep{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .rep .from{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#93A5B6;font-weight:800}
+  .rep .to{margin-top:4px;font-size:15px;font-weight:700}
+  .rep .why{margin-top:2px;font-size:12.5px;color:var(--soft);line-height:1.45}
+
+  /* slide 2 */
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+  th{text-align:left;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+    border-bottom:2px solid var(--border);padding:0 10px 7px 0;font-weight:800}
+  td{padding:7px 10px 7px 0;border-bottom:1px solid var(--border);color:var(--soft)}
+  td:first-child{color:var(--ink);font-weight:700}
+  .two{display:grid;grid-template-columns:1.1fr .9fr;gap:38px;margin-top:16px}
+  .box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px 18px;
+    box-shadow:0 1px 1px rgba(20,48,77,.07),0 8px 24px rgba(20,48,77,.06)}
+  .box h3{margin:0 0 6px;font-size:16px}
+  .box ul{margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:var(--soft)}
+  .box li b{color:var(--ink)}
+  .limit{background:var(--sun-bg);border-color:#F0DDB6}
+  .lose{background:var(--terra-bg);border-color:#EAC9BC}
+  .keep{background:var(--olive-bg);border-color:#CFE0C5}
+  pre{margin:8px 0 0;background:var(--ink);color:#DCE9F4;border-radius:9px;padding:10px 13px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.5;overflow:hidden}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide">
+  <div class="eyebrow">Zonder Paperclip · 1/2</div>
+  <h1>Dezelfde lus, minder lagen.</h1>
+  <p class="lede"><b>Cron</b> is de klok, <span class="mono">state.json</span> is de wachtrij,
+  <b>git</b> is het auditlog, <b>Telegram</b> is de vraag. Eén wachter, geen organogram.</p>
+
+  <div class="ribbon">
+    <div class="step">
+      <div class="who">extern</div>
+      <div class="n">1</div>
+      <h3>Bron</h3>
+      <p>GitHub Actions, Vercel en een doorgestuurde mail sturen een <b>webhook</b>. Geen e-mail meer.</p>
+      <p class="mono" style="font-size:11.5px;color:#7D90A2;margin-top:8px">workflow_run · deployment.error</p>
+    </div>
+    <div class="step ops">
+      <div class="who">agent-ops</div>
+      <div class="n">2</div>
+      <h3>Inlaat</h3>
+      <p>Eén incident per <b>oorzaak</b>, niet per bericht. Teller, severity, laatste melding.</p>
+      <p class="mono" style="font-size:11.5px;color:#7D90A2;margin-top:8px">state.json · questions.json</p>
+    </div>
+    <div class="step">
+      <div class="who">jij</div>
+      <div class="n">3</div>
+      <h3>Zicht</h3>
+      <p>Cockpit met drie lanen. Telegram alleen bij afwijking: <b>3 regels</b>, of één vraag met knoppen.</p>
+    </div>
+    <div class="step do">
+      <div class="who">cron</div>
+      <div class="n">4</div>
+      <h3>Daad</h3>
+      <p>Elke 15 min: open incident? › <b>één</b> run. Geen incident? › niets. Lock tegen overlap.</p>
+      <p class="mono" style="font-size:11.5px;color:#8A6A2A;margin-top:8px">opencode run --auto</p>
+    </div>
+    <div class="step pr">
+      <div class="who">bewijs</div>
+      <div class="n">5</div>
+      <h3>PR + verslag</h3>
+      <p>Oorzaak met <span class="mono">bestand:regel</span>, impact, wat hij <b>niet</b> deed. Jij merget.</p>
+    </div>
+  </div>
+
+  <div class="return">
+    <span class="lbl">terug</span>
+    <span class="line"></span>
+    <span>antwoord of merge <span class="sep">›</span> <span class="mono">state.json</span> <span class="sep">›</span> de volgende run pakt het op</span>
+  </div>
+
+  <div class="ex">
+    <span class="lbl" style="color:#93A5B6">voorbeeld</span>
+    <b>Milos</b> <span class="sep">›</span> refresh faalt <span class="sep">›</span>
+    <b>1</b> incident (20×) <span class="sep">›</span> cockpit rood + <b>1</b> appje
+    <span class="sep">›</span> PR + vraag <span class="sep">›</span> jij: &ldquo;bron navragen&rdquo;
+  </div>
+
+  <div class="replace">
+    <div class="rep">
+      <div class="from">Paperclip had</div>
+      <div class="to">een heartbeat-scheduler</div>
+      <div class="why">Hier: cron elke 15 minuten. Zelfde effect, één regel in crontab.</div>
+    </div>
+    <div class="rep">
+      <div class="from">Paperclip had</div>
+      <div class="to">tickets en een queue</div>
+      <div class="why">Hier: <span class="mono">state.json</span> + incidenten. De runner leest alleen wat open staat.</div>
+    </div>
+    <div class="rep">
+      <div class="from">Paperclip had</div>
+      <div class="to">budgetten per agent</div>
+      <div class="why">Hier: Console-budget als harde muur + max runs per dag. Geen per-agent uitsplitsing.</div>
+    </div>
+  </div>
+
+  <div class="close"><span class="r"></span>Je verliest geen autonomie. Je verliest alleen het dashboard dat je nog niet nodig hebt.</div>
+
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>zonder paperclip · 1/2</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="eyebrow">Zonder Paperclip · 2/2</div>
+  <h2>Wat draait waar — en wat je inlevert.</h2>
+
+  <div class="two">
+    <div>
+      <table>
+        <tr><th>Onderdeel</th><th>Draait op</th><th>Kosten</th></tr>
+        <tr><td>agent-ops</td><td>VPS · Coolify-app</td><td>€0</td></tr>
+        <tr><td>Runner (cron)</td><td>VPS</td><td>€0</td></tr>
+        <tr><td>opencode run</td><td>VPS · eigen worktree</td><td>≈ $2/mnd</td></tr>
+        <tr><td>Cockpit</td><td>VPS · achter Access</td><td>€0</td></tr>
+        <tr><td>Telegram</td><td>extern</td><td>€0</td></tr>
+        <tr><td>GitHub · Vercel</td><td>extern</td><td>€0</td></tr>
+      </table>
+
+      <div class="box limit" style="margin-top:18px">
+        <h3>De grenzen die je zelf zet</h3>
+        <ul>
+          <li><b>Budget:</b> Console workspace-budget (de harde muur) + max runs per dag.</li>
+          <li><b>Tijd:</b> 10 minuten per run, daarna SIGTERM.</li>
+          <li><b>Toegang:</b> GitHub alleen op 2–3 repo's; geen <span class="mono">main</span>.</li>
+          <li><b>Lock:</b> één run tegelijk.</li>
+        </ul>
+      </div>
+
+      <div class="box" style="margin-top:14px">
+        <h3>De lus, letterlijk</h3>
+        <pre>*/15 * * * *  node src/collect.mjs
+*/15 * * * *  node src/run-if-needed.mjs
+
+# run-if-needed:
+#   open p0/p1?  › opencode run --auto
+#   geen lock?   › start
+#   klaar        › PR + verslag + state</pre>
+      </div>
+    </div>
+
+    <div>
+      <div class="box keep">
+        <h3>Wat je houdt</h3>
+        <ul>
+          <li>dedupe: één incident per oorzaak</li>
+          <li>automatisch sluiten bij herstel</li>
+          <li>de vraag met knoppen</li>
+          <li>audit: wie, wanneer, welk bewijs</li>
+        </ul>
+      </div>
+      <div class="box lose" style="margin-top:14px">
+        <h3>Wat je inlevert</h3>
+        <ul>
+          <li>geen organogram of hire-approvals</li>
+          <li>geen kosten per agent (alleen totaal)</li>
+          <li>geen run-history-UI — wel <span class="mono">events.ndjson</span></li>
+        </ul>
+      </div>
+      <div class="box" style="margin-top:14px">
+        <h3>Wanneer Paperclip wél</h3>
+        <ul>
+          <li>zodra de CMO erbij komt</li>
+          <li>zodra je per agent wilt budgetteren</li>
+          <li>zodra je een hire wilt goedkeuren</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>zonder paperclip · 2/2</span></div>
+</section>
+
+<script>
+  const p = new URLSearchParams(location.search);
+  const s = p.get('s');
+  if (s) {
+    document.body.style.margin = '0';
+    document.querySelectorAll('.slide').forEach((el, i) => {
+      el.style.display = (i + 1 === Number(s)) ? 'block' : 'none';
+      el.style.margin = '0';
+      el.style.border = '0';
+    });
+  }
+</script>
+</body>
+</html>
