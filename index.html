@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Agent-company · CycladesGo</title>
+<style>
+  :root{
+    --bg:#FAF7F2; --surface:#FFFFFF; --surface2:#EEF2F6;
+    --ink:#0D2B4A; --soft:#46617D; --muted:#55697D; --border:#D9E2E9;
+    --aegean:#1268B3; --aegean-deep:#0E5594; --aegean-bg:#E8F1F9;
+    --sea:#0E8A8F; --sea-bg:#E4F2F2;
+    --sun:#E8A33C; --sun-ink:#8A5B12; --sun-bg:#FBF3E2;
+    --olive:#4C7A34; --olive-bg:#E9F2E3;
+    --terra:#A8441F; --terra-bg:#F9EAE4;
+    --plum:#B0356F; --plum-bg:#F7E8EF;
+    --radius:14px;
+    --shadow:0 1px 1px rgba(20,48,77,.08), 0 10px 30px rgba(20,48,77,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .slide{
+    position:relative; width:1600px; height:900px; padding:76px 88px 86px;
+    background:var(--bg); overflow:hidden; page-break-after:always; margin:0 auto 28px;
+    border-bottom:1px solid var(--border);
+  }
+  .slide::before{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background:
+      radial-gradient(900px 420px at 88% -10%, rgba(18,104,179,.07), transparent 60%),
+      radial-gradient(700px 360px at -8% 108%, rgba(232,163,60,.10), transparent 60%);
+  }
+  .slide > *{position:relative; z-index:1}
+  .eyebrow{font-size:15px; letter-spacing:.16em; text-transform:uppercase; color:var(--aegean); font-weight:700}
+  h1{font-size:72px; line-height:1.02; letter-spacing:-.03em; margin:18px 0 0; font-weight:800}
+  h2{font-size:46px; line-height:1.08; letter-spacing:-.02em; margin:14px 0 0; font-weight:800}
+  .lede{font-size:25px; line-height:1.42; color:var(--soft); max-width:1050px; margin-top:22px}
+  .foot{position:absolute; left:88px; right:88px; bottom:34px; display:flex; justify-content:space-between;
+    font-size:13px; letter-spacing:.09em; text-transform:uppercase; color:#8194A6; border-top:1px solid var(--border); padding-top:12px}
+  .kicker{font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+
+  /* cover */
+  .cover{display:flex; flex-direction:column; justify-content:center}
+  .cover h1{font-size:96px; max-width:1200px}
+  .cover .lede{font-size:30px; max-width:980px}
+  .cover .meta{margin-top:56px; display:flex; gap:26px; align-items:center; font-size:16px; color:var(--muted)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--sea);display:inline-block;margin-right:9px}
+  .rule{height:3px; width:74px; background:var(--sun); border-radius:2px; margin-top:34px}
+  .pillrow{display:flex; gap:12px; margin-top:46px}
+  .pill{background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:9px 18px;
+    font-size:14px; font-weight:600; color:var(--soft); box-shadow:var(--shadow)}
+  .pill b{color:var(--aegean); margin-right:8px; font-weight:800}
+
+  /* generic grid */
+  .grid{display:grid; gap:22px; margin-top:44px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:1fr 1fr}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:28px 28px 26px; box-shadow:var(--shadow)}
+  .card h3{margin:0 0 10px; font-size:23px; letter-spacing:-.01em}
+  .card p{margin:0; color:var(--soft); font-size:17px; line-height:1.5}
+  .tag{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    padding:5px 10px; border-radius:999px; margin-bottom:14px}
+  .t-a{background:var(--aegean-bg); color:var(--aegean-deep)}
+  .t-s{background:var(--sea-bg); color:var(--sea)}
+  .t-o{background:var(--olive-bg); color:var(--olive)}
+  .t-x{background:var(--terra-bg); color:var(--terra)}
+  .t-u{background:var(--sun-bg); color:var(--sun-ink)}
+  .t-p{background:var(--plum-bg); color:var(--plum)}
+
+  /* numbers */
+  .nums{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:54px}
+  .num{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:30px 30px 26px; box-shadow:var(--shadow)}
+  .num .v{font-size:64px; font-weight:800; letter-spacing:-.04em; line-height:1}
+  .num .l{font-size:17px; color:var(--soft); margin-top:12px; line-height:1.4}
+  .red{color:var(--terra)} .green{color:var(--olive)} .amber{color:var(--sun-ink)}
+
+  /* dashboard mock */
+  .board{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 26px; margin-top:20px}
+  .board .head{display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--border); padding-bottom:9px}
+  .board .head .t{font-weight:800; font-size:18px; letter-spacing:.04em}
+  .board .head .m{font-size:12.5px; color:var(--muted)}
+  .lane{margin-top:12px}
+  .lane .lt{font-size:11.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--aegean); display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:5px}
+  .lane .lt span:last-child{color:var(--muted); letter-spacing:.06em; text-transform:none; font-weight:600}
+  .row{display:grid; grid-template-columns:170px 1fr 96px; gap:16px; padding:5px 0; font-size:14.5px; border-bottom:1px dotted #E6EDF3}
+  .row:last-child{border-bottom:0}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13.5px; color:var(--soft)}
+  .st{font-weight:700; text-align:right; font-size:12.5px; letter-spacing:.04em}
+  .inbox{margin-top:10px; background:var(--sun-bg); border:1px solid #F0DDB6; border-radius:10px; padding:9px 16px}
+  .inbox .it{display:flex; gap:12px; align-items:baseline; font-size:14.5px; padding:2px 0}
+  .inbox .n{font-weight:800; color:var(--sun-ink); width:18px}
+
+  /* telegram */
+  .tg{width:520px; background:#0E1621; border-radius:22px; padding:20px 18px 22px; box-shadow:0 24px 60px rgba(13,43,74,.28); color:#EAF1F6}
+  .tg .bar{display:flex; align-items:center; gap:10px; padding:0 4px 14px; border-bottom:1px solid rgba(255,255,255,.09); font-size:13px; color:#9FB0BF}
+  .tg .bubble{background:#182533; border-radius:16px 16px 16px 6px; padding:16px 18px; margin-top:16px; font-size:15px; line-height:1.5; white-space:pre-wrap}
+  .tg .bubble b{color:#fff}
+  .tg .btns{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .tg .btn{background:#22364A; border:1px solid #2F4A63; color:#DCE9F4; padding:9px 14px; border-radius:9px; font-size:13.5px; font-weight:600}
+  .tg .btn.rec{background:#1D4ED8; border-color:#1D4ED8; color:#fff}
+  .tg .meta{font-size:12.5px; color:#8FA3B4; margin-top:12px}
+  .legend{display:flex; flex-direction:column; gap:18px; justify-content:center}
+  .lg{display:flex; gap:14px; align-items:flex-start}
+  .lg .k{width:30px;height:30px;border-radius:8px;background:var(--aegean-bg);color:var(--aegean-deep);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto}
+  .lg p{margin:0; font-size:17px; line-height:1.45; color:var(--soft)}
+  .lg p b{color:var(--ink)}
+
+  /* architecture */
+  .arch{display:grid; grid-template-columns:1fr 92px 1fr; gap:0; align-items:center; margin-top:52px}
+  .box{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:30px; box-shadow:var(--shadow); min-height:250px}
+  .box .tag{margin-bottom:16px}
+  .box h3{margin:0 0 12px; font-size:26px}
+  .box ul{margin:0; padding-left:20px; color:var(--soft); font-size:16.5px; line-height:1.7}
+  .arrow{text-align:center; color:var(--aegean); font-size:30px; font-weight:800}
+  .json{margin-top:22px; background:var(--ink); color:#DCE9F4; border-radius:10px; padding:14px 18px;
+    font-family:ui-monospace,Menlo,Consolas,monospace; font-size:13.5px; line-height:1.6}
+
+  /* table */
+  table{width:100%; border-collapse:collapse; margin-top:32px; font-size:17px}
+  th{ text-align:left; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted);
+    border-bottom:2px solid var(--border); padding:0 14px 10px 0; font-weight:800}
+  td{padding:12px 14px 12px 0; border-bottom:1px solid var(--border); color:var(--soft); vertical-align:top}
+  td:first-child{color:var(--ink); font-weight:700}
+  td.num-r{text-align:right; font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--ink)}
+
+  /* timeline */
+  .tl{display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:70px; position:relative}
+  .tl::before{content:""; position:absolute; left:0; right:0; top:17px; height:2px; background:var(--border)}
+  .wk{position:relative; padding-right:18px}
+  .wk .b{width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--aegean);position:relative; z-index:1}
+  .wk.done .b{background:var(--aegean)}
+  .wk .h{margin-top:18px; font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--aegean)}
+  .wk p{margin:8px 0 0; font-size:15.5px; line-height:1.45; color:var(--soft); max-width:200px}
+
+  /* checklist */
+  .check{columns:2; column-gap:54px; margin-top:34px}
+  .check div{break-inside:avoid; display:flex; gap:12px; padding:9px 0; font-size:17px; color:var(--soft); border-bottom:1px solid var(--border)}
+  .check .bx{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex:0 0 auto;margin-top:2px}
+  .check .bx.on{background:var(--aegean); border-color:var(--aegean)}
+
+  .two{display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:start}
+  .note{background:var(--aegean-bg); border-left:4px solid var(--aegean); padding:16px 20px; border-radius:0 10px 10px 0;
+    font-size:16px; line-height:1.5; color:var(--aegean-deep); margin-top:26px}
+  .big{font-size:82px; font-weight:800; letter-spacing:-.04em; line-height:1}
+
+  /* print */
+  @page{ size:1600px 900px; margin:0 }
+  @media print{
+    html,body{background:#fff}
+    .slide{margin:0; border:0; box-shadow:none}
+  }
+  body.single .slide{margin:0; border:0}
+</style>
+</head>
+<body>
+<a href="deck.pdf" style="position:fixed;right:18px;bottom:18px;z-index:99;background:#0D2B4A;color:#fff;text-decoration:none;font:700 13px ui-sans-serif,system-ui;padding:10px 14px;border-radius:8px;box-shadow:0 6px 20px rgba(13,43,74,.25)">PDF ↓</a>
+
+<!-- 1 ---------------------------------------------------------------- -->
+<section class="slide cover">
+  <div class="eyebrow">CycladesGo · intern</div>
+  <h1>Een bedrijf dat<br>zichzelf draait</h1>
+  <div class="rule"></div>
+  <p class="lede">Eén cockpit, drie lanen, één vraag per keer. Agents doen het werk;
+  jij leest alleen wat ertoe doet.</p>
+  <div class="meta">
+    <span><span class="dot"></span>Plan · 27 oktober 2026</span>
+    <span>·</span>
+    <span>Paperclip + OpenCode</span>
+    <span>·</span>
+    <span>≈ $2–4 per maand</span>
+  </div>
+  <div class="pillrow">
+    <div class="pill"><b>01</b>Vertrouwen</div>
+    <div class="pill"><b>02</b>Dienstregeling</div>
+    <div class="pill"><b>03</b>Bereik</div>
+    <div class="pill"><b>04</b>Eén inbox</div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>01</span></div>
+</section>
+
+<!-- 2 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De aanleiding</div>
+  <h2>Niemand merkte het.</h2>
+  <p class="lede">Acht dagen lang faalden de workflows, drie eilanden tonen een verlopen
+  dienstregeling, en de sleutel was al in september verlopen. De signalen waren er;
+  de boodschapper niet.</p>
+  <div class="nums">
+    <div class="num"><div class="v red">3 / 5</div><div class="l">eilanden met verlopen data —
+      naxos, milos, ios. Paros volgt vandaag.</div></div>
+    <div class="num"><div class="v red">8 dagen</div><div class="l">tussen de eerste falende
+      run en het moment dat iemand keek.</div></div>
+    <div class="num"><div class="v red">401</div><div class="l">de OpenCode-sleutel:
+      <span class="mono">api_key_expired</span>, onveranderd sinds 19 september.</div></div>
+  </div>
+  <div class="note">Dit is geen incident. Dit is een ontbrekende laag: niemand die kijkt,
+  niemand die het uitlegt, niemand die het vraagt.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>02</span></div>
+</section>
+
+<!-- 3 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">Het model</div>
+  <h2>Drie vragen, drie lanen.</h2>
+  <p class="lede">Geen organogram om te lezen. Drie vragen die je elke ochtend in één blik
+  beantwoordt, en één inbox met wat jij moet doen.</p>
+  <div class="grid g3">
+    <div class="card">
+      <span class="tag t-s">Laan 1</span>
+      <h3>Vertrouwen</h3>
+      <p><b>Kunnen mensen de app gebruiken, en is hij veilig?</b></p>
+      <p style="margin-top:12px">Groen = 6 hosts 200 · TLS &gt; 14 dagen · headers compleet ·
+      geen CVE hoog · back-up &lt; 24u.</p>
+    </div>
+    <div class="card">
+      <span class="tag t-a">Laan 2</span>
+      <h3>Dienstregeling</h3>
+      <p><b>Klopt de data die we publiceren, en hoe lang nog?</b></p>
+      <p style="margin-top:12px">Groen = elk eiland &gt; 7 dagen marge · refresh groen ·
+      0 unmapped · geen tariefdrift.</p>
+    </div>
+    <div class="card">
+      <span class="tag t-o">Laan 3</span>
+      <h3>Bereik</h3>
+      <p><b>Groeien we, en wat publiceren we?</b></p>
+      <p style="margin-top:12px">Groen = plan gehaald · 0 AI-misrepresentaties ·
+      één experiment met resultaat.</p>
+    </div>
+  </div>
+  <div class="note">De cockpit toont de staat. Paperclip draait de machines. Jij kijkt
+  naar de cockpit — en die blijft werken als Paperclip plat ligt.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>03</span></div>
+</section>
+
+<!-- 4 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">Het overzicht</div>
+  <h2>Het bureau.</h2>
+  <div class="board">
+    <div class="head"><div class="t">HET BUREAU</div><div class="m">vr 27 okt · 08:00 · ververst 15 min</div></div>
+
+    <div class="lane">
+      <div class="lt"><span>1 · Vertrouwen</span><span>6 hosts · 1 afwijking</span></div>
+      <div class="row"><div class="mono">5 planners</div><div>200 · TLS 61d · headers ok</div><div class="st green">OK</div></div>
+      <div class="row"><div class="mono">portal</div><div>200 · TLS 61d · <b>CSP ontbreekt</b></div><div class="st amber">WARN</div></div>
+      <div class="row"><div class="mono">sleutels · back-up · CVE</div><div>opencode 0d · cloudflare 0d · github 31d · back-up 4u · CVE hoog 0</div><div class="st red">KEY</div></div>
+    </div>
+
+    <div class="lane">
+      <div class="lt"><span>2 · Dienstregeling</span><span>5 eilanden · 3 rood</span></div>
+      <div class="row"><div class="mono">NAXOS</div><div>t/m 16 okt · refresh groen, verkeerde week</div><div class="st red">−7 DAGEN</div></div>
+      <div class="row"><div class="mono">MILOS</div><div>t/m 11 okt · refresh faalt: 4 routes weg</div><div class="st red">−12 DAGEN</div></div>
+      <div class="row"><div class="mono">IOS</div><div>t/m 11 okt · 13 parserfouten, geen einddatum</div><div class="st red">−12 DAGEN</div></div>
+      <div class="row"><div class="mono">PAROS</div><div>t/m 18 okt · refresh loopt</div><div class="st amber">0 DAGEN</div></div>
+      <div class="row"><div class="mono">SANTORINI</div><div>t/m 22 okt · bron 16 okt</div><div class="st green">+4 DAGEN</div></div>
+    </div>
+
+    <div class="lane">
+      <div class="lt"><span>3 · Bereik</span><span>week 43</span></div>
+      <div class="row"><div class="mono">plan · pagina's · citaties</div><div>1 gids · 1 localisatie · panel — 2/3 klaar · 16 indexeerbaar · 4 citaties · 0 “live”-fouten</div><div class="st green">OP KOERS</div></div>
+    </div>
+
+    <div class="inbox">
+      <div class="it"><span class="n">1</span><div>Milos: routes verbergen of bron navragen? <b>→ bron navragen</b></div></div>
+      <div class="it"><span class="n">2</span><div>Imprint: VAT + adres ontbreken — blokkeert indexering</div></div>
+      <div class="it"><span class="n">3</span><div>Analytics: server-side of banner? <b>→ server-side</b></div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>04</span></div>
+</section>
+
+<!-- 5 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De vraag</div>
+  <div class="two" style="margin-top:34px">
+    <div>
+      <h2 style="margin-top:0">Een appje dat om een<br>beslissing vraagt.</h2>
+      <p class="lede" style="font-size:21px">Alleen als een mens moet beslissen. Al het
+      andere doet de agent en meldt hij achteraf.</p>
+      <div class="legend" style="margin-top:34px">
+        <div class="lg"><div class="k">1</div><p><b>Wat · impact · wat ik al deed.</b> Je hoeft
+        niet eerst een gesprek te beginnen.</p></div>
+        <div class="lg"><div class="k">2</div><p><b>Opties met een aanbeveling.</b> En altijd:
+        wat gebeurt er als je niets doet.</p></div>
+        <div class="lg"><div class="k">3</div><p><b>Kosten, doorlooptijd, deadline.</b>
+        Eén antwoord sluit de vraag.</p></div>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="bar"><span>●</span><span>CycladesOpsBot</span><span style="margin-left:auto">nu</span></div>
+      <div class="bubble"><b>🟡 MILOS — dienstregeling verloopt over 0 dagen</b>
+
+De operator publiceert 4 routes niet meer die wij wél tonen:
+Adamas–Paleochori · Adamas–Provata · Adamas–Fyriplaka · Adamas–Airport
+
+Ik heb al gedaan: bron 3× gecontroleerd, oude data blijft staan, bezoekers zien de banner.
+
+Wat wil je dat we doen?</div>
+      <div class="btns">
+        <div class="btn">Routes verbergen</div>
+        <div class="btn rec">Bron navragen ✓</div>
+        <div class="btn">Meer uitleg</div>
+      </div>
+      <div class="meta">Aanbeveling: bron navragen · €0 · 1 dag · 24u open<br>
+      Doe je niets: banner blijft, 4 haltes weg.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>05</span></div>
+</section>
+
+<!-- 6 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De architectuur</div>
+  <h2>Machinekamer en cockpit.</h2>
+  <p class="lede">Eén bron van waarheid, twee vensters. De cockpit leest hetzelfde bestand
+  als de agents — en overleeft een storing in Paperclip.</p>
+  <div class="arch">
+    <div class="box">
+      <span class="tag t-a">Machinekamer</span>
+      <h3>Paperclip</h3>
+      <ul>
+        <li>organogram, rollen, rapportagelijnen</li>
+        <li>per-agent budgetten met automatische pauze</li>
+        <li>hire-approvals en review-gates</li>
+        <li>routines, heartbeats, run-receipts</li>
+      </ul>
+      <div class="json">wakes on events → OpenCode → PR → bewijs</div>
+    </div>
+    <div class="arrow">⇄</div>
+    <div class="box">
+      <span class="tag t-s">Cockpit</span>
+      <h3>Het bureau</h3>
+      <ul>
+        <li>drie lanen, één inbox</li>
+        <li>Telegram-digest in drie regels</li>
+        <li>de vraag met knoppen</li>
+        <li>werkt zonder Paperclip</li>
+      </ul>
+      <div class="json">state.json · questions.json · answers.ndjson</div>
+    </div>
+  </div>
+  <div class="note">Geen tweede dashboard bovenop Paperclip, en geen framework naast
+  OpenCode. Drie bronnen van waarheid is precies de fout die dit plan voorkomt.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>06</span></div>
+</section>
+
+<!-- 7 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De mensen</div>
+  <h2>Drie rollen, niet meer.</h2>
+  <p class="lede">De wachter begint met twee lanen; de CMO is vanaf dag één apart. Splitsen
+  gebeurt pas op bewijs — niet op een organogram.</p>
+  <div class="grid g3">
+    <div class="card">
+      <span class="tag t-s">Aan het werk</span>
+      <h3>De wachter</h3>
+      <p>Uptime, veiligheid én de dienstregeling. Ziet een event, zoekt de oorzaak,
+      fixt data of parser op een branch, en vraagt bij een bronwijziging.</p>
+      <p style="margin-top:12px" class="mono">budget $5 · wake on event</p>
+    </div>
+    <div class="card">
+      <span class="tag t-p">Het gezicht</span>
+      <h3>De chief of staff</h3>
+      <p>Bord, budgetten, hiring, escalaties, de digest. Doet geen inhoudelijk werk en
+      is de enige die jou bericht.</p>
+      <p style="margin-top:12px" class="mono">budget $4 · 07:00 dagelijks</p>
+    </div>
+    <div class="card">
+      <span class="tag t-o">De groei</span>
+      <h3>De CMO</h3>
+      <p>Plan, content, localisatie, citaties. €0 media in maand 1; daarna één experiment
+      van €1–2, aangevraagd via de CoS.</p>
+      <p style="margin-top:12px" class="mono">budget $4 · subagents $2</p>
+    </div>
+  </div>
+  <div class="note">Later, op bewijs: data steward (als laan 2 &gt; 4 uur/week kost),
+  support &amp; correcties, legal clerk, controller. Geen tweede baas.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>07</span></div>
+</section>
+
+<!-- 8 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De rekening</div>
+  <div class="two" style="margin-top:20px">
+    <div>
+      <h2 style="margin-top:0">Cents, geen abonnement.</h2>
+      <p class="lede" style="font-size:21px">DeepSeek Flash kost $0,15 per miljoen tokens in
+      en $0,60 uit.Een agent die alleen wakker wordt bij een event betaalt bijna niets.</p>
+      <div style="margin-top:44px"><span class="big">≈ $2–4</span>
+        <div class="kicker" style="margin-top:10px">per maand, het hele bedrijf</div></div>
+      <div class="note" style="margin-top:34px">Plafond: <b>$20/maand</b> voor het bedrijf,
+      <b>$5</b> voor de wachter. Bij 80% een waarschuwing, bij 100% automatisch pauzeren.</div>
+    </div>
+    <div>
+      <table>
+        <tr><th>Agent</th><th>Runs / maand</th><th style="text-align:right">Kosten</th></tr>
+        <tr><td>Wachter</td><td>30 events + 4 incidenten</td><td class="num-r">$0,20</td></tr>
+        <tr><td>Chief of staff</td><td>30 digesten + 4 reviews</td><td class="num-r">$0,30</td></tr>
+        <tr><td>CMO + 3 subagents</td><td>~40 runs</td><td class="num-r">$1,50</td></tr>
+        <tr><td><b>Totaal</b></td><td>event-driven</td><td class="num-r"><b>≈ $2</b></td></tr>
+      </table>
+      <p class="kicker" style="margin-top:26px">Waarom zo laag</p>
+      <p style="font-size:16.5px; color:var(--soft); line-height:1.55; margin-top:8px">
+      Het signaal-script draait elke 15 minuten en kost niets. De agent wordt alleen wakker
+      als er iets is. Geen event = geen tokens.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>08</span></div>
+</section>
+
+<!-- 9 ---------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De grens</div>
+  <h2>Wat mag wie.</h2>
+  <div class="grid g3" style="margin-top:40px">
+    <div class="card">
+      <span class="tag t-o">Zelf doen</span>
+      <h3>De machine</h3>
+      <p>Retry · rollback van eigen deploy · refresh binnen de bron · parserfix op een
+      branch · ticket openen · agent pauzeren · €0.</p>
+    </div>
+    <div class="card">
+      <span class="tag t-u">Vragen</span>
+      <h3>De reiziger of je portemonnee</h3>
+      <p>Route toevoegen of verwijderen · bron wijzigen · tarief · gids of claim publiceren ·
+      €1–2 · juridische keuze.</p>
+    </div>
+    <div class="card">
+      <span class="tag t-x">Nooit</span>
+      <h3>Ook niet na een vraag</h3>
+      <p>Imprint verzinnen · banner uitzetten · sleutel delen · <span class="mono">main</span>
+      direct beschrijven · persoonsgegevens verwerken.</p>
+    </div>
+  </div>
+  <div class="note">De scheidslijn: verandert het wat een reiziger ziet of wat jij betaalt,
+  dan vraag je het. Verandert het alleen hoe de machine werkt, dan doe je het.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>09</span></div>
+</section>
+
+<!-- 10 --------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">De uitvoering</div>
+  <h2>Zes weken.</h2>
+  <p class="lede">Eerst de cockpit, dan de agents. De cockpit heeft Paperclip niet nodig —
+  dus je hebt binnen drie dagen het overzicht dat je nu mist.</p>
+  <div class="tl">
+    <div class="wk"><div class="b"></div><div class="h">Week 1</div><p>Cockpit + lanen 1 en 2. Sleutels roteren. Eerste digest.</p></div>
+    <div class="wk"><div class="b"></div><div class="h">Week 2</div><p>De vraag: knoppen, audit, stille uren, timeout.</p></div>
+    <div class="wk"><div class="b"></div><div class="h">Week 3</div><p>Paperclip. De wachter. Eerste missie: de vier falende workflows.</p></div>
+    <div class="wk"><div class="b"></div><div class="h">Week 4</div><p>Domein + portal live. Vijf gates groen. CoS erbij.</p></div>
+    <div class="wk"><div class="b"></div><div class="h">Week 5</div><p>CMO. Eerste gids. Citatiepanel: nulmeting.</p></div>
+    <div class="wk"><div class="b"></div><div class="h">Week 6</div><p>Review: kosten, incidenten, splitsen of niet.</p></div>
+  </div>
+  <div class="note" style="margin-top:64px">Elke week eindigt met één ding dat
+  <b>aantoonbaar</b> werkt — niet met een opgeleverd document.</div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>10</span></div>
+</section>
+
+<!-- 11 --------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">Week 1</div>
+  <div class="two" style="margin-top:20px">
+    <div>
+      <h2 style="margin-top:0">Wat er maandag<br>gebeurt.</h2>
+      <p class="lede" style="font-size:21px">Geen Paperclip, geen nieuwe ambities. Zicht
+      krijgen op wat er nu staat, en de sleutel die alles blokkeert.</p>
+      <div class="note" style="margin-top:34px">De cockpit is bewust dom: één script, één
+      JSON, één pagina. Geen framework, geen build, geen tweede waarheid.</div>
+    </div>
+    <div class="check" style="columns:1; margin-top:6px">
+      <div><span class="bx on"></span><span>OpenCode-key roteren en testen</span></div>
+      <div><span class="bx on"></span><span>Cloudflare-token met DNS-scope</span></div>
+      <div><span class="bx on"></span><span>agent-ops: collect.mjs + state.json</span></div>
+      <div><span class="bx on"></span><span>Laan 2: vijf eilanden, echte validTo</span></div>
+      <div><span class="bx on"></span><span>Laan 1: hosts, TLS, headers, sleutels</span></div>
+      <div><span class="bx on"></span><span>Eigen Telegram-bot + digest</span></div>
+      <div><span class="bx on"></span><span>Cockpit achter Cloudflare Access</span></div>
+      <div><span class="bx on"></span><span>Telefoon-test, zonder JavaScript</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>11</span></div>
+</section>
+
+<!-- 12 --------------------------------------------------------------- -->
+<section class="slide">
+  <div class="eyebrow">Jouw kant</div>
+  <h2>Vijf beslissingen.</h2>
+  <div class="grid g2" style="margin-top:34px; grid-template-columns:1fr 1fr">
+    <div class="card">
+      <span class="tag t-a">Nu</span>
+      <h3>Drie defaults</h3>
+      <p>Max <b>3 appjes per dag</b> · stille uren <b>22:00–07:00</b> · geen antwoord =
+      <b>niets doen</b>. Zonder deze drie wordt de agent een snoepautomaat.</p>
+    </div>
+    <div class="card">
+      <span class="tag t-u">Deze maand</span>
+      <h3>Vijf keuzes</h3>
+      <p>Domein <span class="mono">.com</span> + <span class="mono">.gr</span>? ·
+      analytics server-side of banner? · mag de wachter bij een bronwijziging een PR
+      openen (nooit mergen)? · wie is de named maintainer? · €0 media in maand 1?</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:30px">Het plan staat volledig in
+  <span class="mono">/root/.opencode/plan/agent-company-plan.md</span> — inclusief de
+  drie brieven, de playbooks, de KPI's en de checklists.</div>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card" style="padding:20px 24px">
+      <span class="tag t-s">Volgende stap 1</span>
+      <h3 style="font-size:20px">Sleutels</h3>
+      <p style="font-size:15.5px">OpenCode + Cloudflare roteren, en de probe die je waarschuwt vóór iets stilvalt.</p>
+    </div>
+    <div class="card" style="padding:20px 24px">
+      <span class="tag t-a">Volgende stap 2</span>
+      <h3 style="font-size:20px">De cockpit</h3>
+      <p style="font-size:15.5px">agent-ops: collect.mjs, state.json, office.html en de Telegram-digest.</p>
+    </div>
+    <div class="card" style="padding:20px 24px">
+      <span class="tag t-o">Volgende stap 3</span>
+      <h3 style="font-size:20px">Het bewijs</h3>
+      <p style="font-size:15.5px">De vijf eilanden met hun echte validTo. Daarna pas Paperclip.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Agent-company · CycladesGo</span><span>12</span></div>
+</section>
+
+<script>
+  const p = new URLSearchParams(location.search);
+  const s = p.get('s');
+  if (s) {
+    document.body.classList.add('single');
+    document.querySelectorAll('.slide').forEach((el, i) => {
+      el.style.display = (i + 1 === Number(s)) ? 'block' : 'none';
+    });
+  }
+</script>
+</body>
+</html>
