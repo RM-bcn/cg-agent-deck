@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CycladesGo · richting C — havenbord, warm</title>
+<style>
+  :root{
+    --bg:#FAF7F2; --surface:#fff; --surface2:#EEF2F6;
+    --ink:#0D2B4A; --soft:#46617D; --muted:#55697D; --border:#D9E2E9;
+    --aegean:#1268B3; --aegean-deep:#0E5594; --aegean-bg:#E8F1F9;
+    --sea:#0E8A8F; --sea-bg:#E4F2F2;
+    --sun:#E8A33C; --sun-ink:#8A5B12; --sun-bg:#FBF3E2;
+    --olive:#4C7A34; --olive-bg:#E9F2E3;
+    --terra:#A8441F; --terra-bg:#F9EAE4;
+    --r-sm:6px; --r-md:10px; --r-lg:16px;
+    --shadow:0 1px 1px rgba(20,48,77,.10), 0 8px 24px rgba(20,48,77,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* header: de donkere band, maar in de huisstijl */
+  header{background:var(--ink);color:#fff}
+  .bar{display:flex;align-items:center;gap:26px;height:64px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .brand svg{display:block}
+  nav{display:flex;gap:22px;margin-left:auto;font-size:13.5px;color:#C9D6E2}
+  nav a:hover{color:#fff}
+  .lang{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 11px;font-size:12px;color:#E6EEF5}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;padding:56px 0 46px}
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sea);font-weight:800}
+  h1{font-size:54px;line-height:1.02;letter-spacing:-.035em;margin:12px 0 0;font-weight:800}
+  .hy{color:var(--aegean)}
+  .lede{font-size:18px;line-height:1.55;color:var(--soft);max-width:520px;margin-top:16px}
+  .btns{display:flex;gap:10px;margin-top:24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--aegean);color:#fff;padding:12px 18px;
+    border-radius:var(--r-sm);font-weight:600;font-size:14px;box-shadow:var(--shadow)}
+  .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--border);box-shadow:none}
+  .stamp{display:flex;gap:10px;align-items:baseline;margin-top:26px;font-size:12px;color:var(--muted)}
+  .stamp b{color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.02em}
+
+  /* het tafereel */
+  .scene{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#CFE6F2;
+    box-shadow:0 2px 4px rgba(20,48,77,.10), 0 18px 40px rgba(20,48,77,.12)}
+  .scene svg{display:block;width:100%;height:auto}
+
+  /* de tafel */
+  .board{margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+    box-shadow:var(--shadow);overflow:hidden}
+  .bhead{display:flex;align-items:baseline;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#fff,#F7FAFC)}
+  .bhead .t{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+  .bhead .m{font-size:11.5px;color:var(--muted)}
+  .thead,.trow{display:grid;grid-template-columns:1fr 160px 96px 118px 110px;gap:14px;align-items:center;padding:12px 20px}
+  .thead{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);background:var(--surface2);border-bottom:1px solid var(--border)}
+  .trow{border-bottom:1px solid var(--border)}
+  .trow:last-child{border-bottom:0}
+  .trow:hover{background:#FBFCFD}
+  .is{display:flex;align-items:center;gap:11px}
+  .dome{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;
+    font-size:11px;font-weight:800;flex:0 0 auto}
+  .nm{font-weight:700;font-size:15px;letter-spacing:-.01em}
+  .sm{font-size:11.5px;color:var(--muted)}
+  .op{font-size:13px;color:var(--soft)}
+  .num{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--soft);text-align:right}
+  .v{font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+  .pill{justify-self:end;font-size:10px;font-weight:800;letter-spacing:.08em;padding:5px 9px;border-radius:5px;white-space:nowrap}
+  .ok{background:var(--olive-bg);color:var(--olive)}
+  .soon{background:var(--sun-bg);color:var(--sun-ink)}
+  .dead{background:var(--terra-bg);color:var(--terra)}
+
+  /* trust + gidsen */
+  .trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;padding:11px 16px;background:var(--aegean-bg);
+    border-radius:var(--r-sm);font-size:12px;color:var(--aegean-deep)}
+  .trust span{display:inline-flex;align-items:center;gap:7px}
+  .cards{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:34px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:18px 20px;box-shadow:var(--shadow)}
+  .card .k{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--sea);font-weight:800}
+  .card h3{margin:7px 0 6px;font-size:20px;letter-spacing:-.015em}
+  .card p{margin:0;font-size:13.5px;color:var(--soft);line-height:1.55}
+  .quote{background:var(--sun-bg);border-color:#F0DDB6}
+  .quote p{font-size:15px;color:var(--sun-ink)}
+  footer{border-top:1px solid var(--border);margin-top:54px;padding:20px 0 40px;font-size:11.5px;color:var(--muted)}
+
+  /* animatie */
+  @keyframes drive{from{transform:translateX(-180px)}to{transform:translateX(680px)}}
+  @keyframes dash{to{stroke-dashoffset:-64}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.4px)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes sunpulse{0%,100%{opacity:.9}50%{opacity:1}}
+  .bus{animation:drive 16s linear infinite;animation-delay:-7s}
+  .bus .bob{animation:bob 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center bottom}
+  .bus .wheel{animation:spin 1.1s linear infinite;transform-box:fill-box;transform-origin:center}
+  .road-dash{animation:dash 1.2s linear infinite}
+  .sun{animation:sunpulse 6s ease-in-out infinite}
+  @media (prefers-reduced-motion: reduce){ .bus,.bus .bob,.bus .wheel,.road-dash,.sun{animation:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <svg width="34" height="34" viewBox="0 0 64 64" fill="none" aria-label="CycladesGo">
+        <rect width="64" height="64" rx="14" fill="#182632"/>
+        <rect x="10" y="51" width="44" height="3" rx="1.5" fill="#4FB3B3"/>
+        <rect x="10" y="15" width="44" height="6" rx="3" fill="#F2C069"/>
+        <rect x="10" y="19" width="44" height="23" rx="5" fill="#5FA8E0"/>
+        <rect x="15" y="24" width="10" height="9" rx="2" fill="#F1EDE4"/>
+        <rect x="28" y="24" width="10" height="9" rx="2" fill="#F1EDE4"/>
+        <rect x="41" y="24" width="9" height="12" rx="2" fill="#F1EDE4"/>
+        <circle cx="51" cy="38" r="2.2" fill="#F2C069"/>
+        <circle cx="22" cy="45" r="6" fill="#0B151D"/><circle cx="22" cy="45" r="2.4" fill="#5FA8E0"/>
+        <circle cx="42" cy="45" r="6" fill="#0B151D"/><circle cx="42" cy="45" r="2.4" fill="#5FA8E0"/>
+      </svg>
+      CycladesGo
+    </a>
+    <nav>
+      <a href="#">Islands</a><a href="#">Guides</a><a href="#">How it works</a><a href="#">Our data</a><a href="#">About</a>
+    </nav>
+    <span class="lang">EN · EL</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Departures · published schedule</div>
+      <h1>The Cyclades<br>by bus, <span class="hy">on time.</span></h1>
+      <p class="lede">Five islands. Every time is the operator's own published timetable,
+      with the date we checked it. No live data, no tracking, no account.</p>
+      <div class="btns"><a class="btn" href="#">Pick your island →</a><a class="btn ghost" href="#">How we get our data</a></div>
+      <div class="stamp">Last verified <b>02.11.26</b> · 5 islands · 37 lines · 316 journeys</div>
+    </div>
+
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 640 320" role="presentation">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#BFE0F0"/><stop offset=".62" stop-color="#F6E7C9"/><stop offset="1" stop-color="#F3D3A2"/>
+          </linearGradient>
+          <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#4FA3C9"/><stop offset="1" stop-color="#1E6C9A"/>
+          </linearGradient>
+          <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#5A544C"/><stop offset="1" stop-color="#433E38"/>
+          </linearGradient>
+          <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2E86C8"/><stop offset="1" stop-color="#1268B3"/>
+          </linearGradient>
+        </defs>
+
+        <rect width="640" height="190" fill="url(#sky)"/>
+        <circle class="sun" cx="512" cy="66" r="30" fill="#E8A33C"/>
+        <circle cx="512" cy="66" r="46" fill="#E8A33C" opacity=".16"/>
+
+        <!-- heuvels -->
+        <path d="M0 190 C70 150 130 168 196 150 C258 134 300 160 360 148 C430 134 520 166 640 138 L640 200 L0 200 Z" fill="#6E8B5A" opacity=".55"/>
+        <path d="M0 200 C80 176 150 190 220 178 C300 164 360 186 440 176 C520 166 580 186 640 172 L640 214 L0 214 Z" fill="#4C7A34" opacity=".8"/>
+
+        <!-- zee -->
+        <rect y="206" width="640" height="34" fill="url(#sea)"/>
+        <path d="M0 216 H640 M0 228 H640" stroke="#DCEFF7" stroke-width="1.4" opacity=".35"/>
+        <g opacity=".85">
+          <path d="M436 214 L470 214 L462 222 L444 222 Z" fill="#F7F1E4"/>
+          <path d="M452 214 L452 200 L464 214 Z" fill="#FAF7F2"/>
+        </g>
+
+        <!-- weg -->
+        <rect y="240" width="640" height="80" fill="url(#road)"/>
+        <rect y="240" width="640" height="2.5" fill="#E8E2D2" opacity=".55"/>
+        <line class="road-dash" x1="0" y1="286" x2="640" y2="286" stroke="#E8A33C" stroke-width="4" stroke-dasharray="26 22" opacity=".85"/>
+
+        <!-- bus -->
+        <g class="bus" transform="translate(60 0)">
+          <g class="bob">
+            <ellipse cx="86" cy="300" rx="72" ry="4" fill="#000" opacity=".18"/>
+            <rect x="8" y="258" width="156" height="34" rx="8" fill="url(#body)"/>
+            <rect x="8" y="276" width="156" height="7" fill="#0D2B4A" opacity=".9"/>
+            <rect x="8" y="254" width="156" height="5" rx="2.5" fill="#7CB9EA"/>
+            <g fill="#FAF7F2">
+              <rect x="18" y="262" width="24" height="11" rx="2"/>
+              <rect x="48" y="262" width="24" height="11" rx="2"/>
+              <rect x="78" y="262" width="24" height="11" rx="2"/>
+              <rect x="108" y="262" width="20" height="12" rx="2"/>
+            </g>
+            <rect x="136" y="262" width="22" height="12" rx="2" fill="#FAF7F2"/>
+            <circle cx="156" cy="283" r="2.4" fill="#E8A33C"/>
+            <g class="wheel" style="transform-origin:38px 292px">
+              <circle cx="38" cy="292" r="9" fill="#0D2B4A"/><circle cx="38" cy="292" r="3.2" fill="#FAF7F2"/>
+              <path d="M38 284 V300 M30 292 H46" stroke="#FAF7F2" stroke-width="1.6"/>
+            </g>
+            <g class="wheel" style="transform-origin:134px 292px">
+              <circle cx="134" cy="292" r="9" fill="#0D2B4A"/><circle cx="134" cy="292" r="3.2" fill="#FAF7F2"/>
+              <path d="M134 284 V300 M126 292 H142" stroke="#FAF7F2" stroke-width="1.6"/>
+            </g>
+            <text x="18" y="252" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="#FAF7F2" opacity=".75">KTEL · CYCLADES</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="bhead">
+      <div class="t">Islands · published timetables</div>
+      <div class="m">Last verified 2 Nov 2026 · 08:00 UTC</div>
+    </div>
+    <div class="thead"><span>Island</span><span>Operator</span><span style="text-align:right">Journeys</span><span>Valid to</span><span style="text-align:right">Status</span></div>
+
+    <a class="trow" href="#">
+      <div class="is"><span class="dome" style="background:#1268B3">5</span><div><div class="nm">Naxos</div><div class="sm">55 stops · 5 lines</div></div></div>
+      <div class="op">KTEL Naxos</div><div class="num">112</div><div class="v">06.11.26</div><div class="pill ok">VERIFIED</div>
+    </a>
+    <a class="trow" href="#">
+      <div class="is"><span class="dome" style="background:#B4502E">14</span><div><div class="nm">Paros</div><div class="sm">25 stops · 14 lines</div></div></div>
+      <div class="op">KTEL Paros</div><div class="num">84</div><div class="v">18.10.26</div><div class="pill dead">EXPIRED</div>
+    </a>
+    <a class="trow" href="#">
+      <div class="is"><span class="dome" style="background:#6B4E9B">10</span><div><div class="nm">Santorini</div><div class="sm">20 stops · 10 lines</div></div></div>
+      <div class="op">KTEL Santorini</div><div class="num">62</div><div class="v">22.10.26</div><div class="pill dead">EXPIRED</div>
+    </a>
+    <a class="trow" href="#">
+      <div class="is"><span class="dome" style="background:#4C7A34">7</span><div><div class="nm">Milos</div><div class="sm">19 stops · 7 lines</div></div></div>
+      <div class="op">Milos Buses</div><div class="num">52</div><div class="v">11.10.26</div><div class="pill soon">EXPIRING</div>
+    </a>
+    <a class="trow" href="#">
+      <div class="is"><span class="dome" style="background:#96650F">1</span><div><div class="nm">Ios</div><div class="sm">3 stops · 1 line</div></div></div>
+      <div class="op">KTEL Ios</div><div class="num">6</div><div class="v">11.10.26</div><div class="pill dead">EXPIRED</div>
+    </a>
+  </section>
+
+  <div class="trust">
+    <span>◯ Unofficial</span><span>◷ Scheduled, never live</span><span>⛁ Open data</span><span>⊘ No tracking</span>
+  </div>
+
+  <section class="cards">
+    <div class="card">
+      <div class="k">Guide · ferry to bus</div>
+      <h3>The connection nobody publishes</h3>
+      <p>Ferries and buses run on separate timetables. Neither operator waits for the other.
+      What that means for the last bus of the day, per island.</p>
+    </div>
+    <div class="card quote">
+      <div class="k">Why we show dates</div>
+      <p>“A timetable without a verification date is a rumour.” Every row above carries the
+      day we last checked the operator's own page.</p>
+    </div>
+  </section>
+
+  <footer>
+    Not affiliated with KTEL. Times are the operator's published schedule, never a live
+    position. © OpenStreetMap contributors (ODbL). · Prototype C · warm havenbord
+  </footer>
+</main>
+</body>
+</html>
