@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>CycladesGo · vier richtingen</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#EDE9E2;color:#0D2B4A;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:1240px;margin:0 auto;padding:56px 28px 100px}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#1268B3;font-weight:800}
+  h1{font-size:48px;line-height:1.04;letter-spacing:-.03em;margin:12px 0 0}
+  .lede{font-size:19px;color:#46617D;max-width:800px;margin-top:14px}
+  .opt{margin-top:54px}
+  .opt .head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:10px}
+  .opt .head h2{font-size:24px;margin:0;letter-spacing:-.01em}
+  .opt .head .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#7D90A2}
+  .opt .why{font-size:14.5px;color:#46617D;max-width:900px;margin:0 0 14px}
+  .opt .why b{color:#0D2B4A}
+  .frame{background:#fff;border:1px solid #D5DDE3;border-radius:12px;overflow:hidden;
+    box-shadow:0 2px 4px rgba(20,48,77,.08),0 16px 40px rgba(20,48,77,.10)}
+  .note{display:flex;gap:24px;margin-top:10px;font-size:12.5px;color:#6B7C8C}
+  .note span b{color:#0D2B4A}
+  .tags{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .tag{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;
+    border-radius:999px;background:#E8F1F9;color:#1268B3}
+  .tag.g{background:#E9F2E3;color:#4C7A34}
+  .tag.t{background:#F9EAE4;color:#A8441F}
+
+  /* ---------- A · papier & inkt (huidig) ---------- */
+  .a{background:#FAF7F2;padding:34px 40px 38px;font-size:15px}
+  .a .top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid #E2DCD2}
+  .a .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+  .a .mark{width:30px;height:30px;border-radius:8px;background:#1268B3;color:#fff;display:flex;align-items:center;justify-content:center}
+  .a nav{display:flex;gap:16px;font-size:13px;color:#46617D}
+  .a .hero{margin-top:26px;max-width:640px}
+  .a .kick{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#1268B3;font-weight:800}
+  .a h3{font-size:40px;letter-spacing:-.03em;line-height:1.05;margin:8px 0 0}
+  .a .sub{color:#46617D;margin-top:10px}
+  .a .btns{display:flex;gap:10px;margin-top:16px}
+  .a .btn{background:#1268B3;color:#fff;padding:10px 16px;border-radius:6px;font-weight:600;font-size:13.5px}
+  .a .btn.ghost{background:transparent;color:#0D2B4A;border:1px solid #D9E2E9}
+  .a .list{margin-top:24px;display:grid;gap:7px}
+  .a .row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E2DCD2;border-radius:10px;padding:9px 12px}
+  .a .dome{width:30px;height:30px;border-radius:8px;background:#1268B3;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .a .nm{font-weight:700;font-size:14px}
+  .a .sm{font-size:11.5px;color:#6B7C8C}
+  .a .push{margin-left:auto}
+  .a .bdg{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:5px}
+  .a .ok{background:#E9F2E3;color:#4C7A34}
+  .a .warn{background:#FBF3E2;color:#8A5B12}
+  .a .bad{background:#F9EAE4;color:#A8441F}
+  .a .chips{margin-top:14px;padding:8px 12px;background:#E8F1F9;border-radius:6px;font-size:11px;color:#0E5594;display:flex;gap:14px}
+
+  /* ---------- B · archief ---------- */
+  .b{background:#F4EDE0;color:#1C2A22;padding:34px 44px 40px;font-size:15px}
+  .b .top{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid #1C2A22;padding-bottom:10px}
+  .b .brand{font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:-.01em}
+  .b .brand span{font-family:ui-sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:block;color:#6B5B45;margin-top:2px}
+  .b nav{display:flex;gap:14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6B5B45}
+  .b .hero{margin-top:26px;display:grid;grid-template-columns:1.2fr .8fr;gap:34px;align-items:start}
+  .b .kick{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#A8441F;font-weight:700}
+  .b h3{font-family:Georgia,'Times New Roman',serif;font-size:44px;line-height:1.02;letter-spacing:-.02em;margin:8px 0 0;font-weight:400}
+  .b .sub{color:#4A4034;margin-top:10px;font-size:14.5px;line-height:1.55}
+  .b .aside{border-left:1px solid #C9BBA4;padding-left:18px;font-size:12px;color:#6B5B45;line-height:1.6}
+  .b .aside b{display:block;color:#1C2A22;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .b .list{margin-top:26px;border-top:1px solid #C9BBA4}
+  .b .row{display:grid;grid-template-columns:40px 1fr 150px 90px;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid #C9BBA4}
+  .b .num{font-family:Georgia,serif;font-size:20px;color:#A8441F}
+  .b .nm{font-family:Georgia,serif;font-size:19px}
+  .b .sm{font-size:11.5px;color:#6B5B45}
+  .b .vd{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:.04em;text-align:right}
+  .b .ok{color:#3F6B2C}
+  .b .warn{color:#8A5B12}
+  .b .bad{color:#A8441F}
+  .b .foot{margin-top:16px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A7A62}
+
+  /* ---------- C · havenbord ---------- */
+  .c{background:#F1F4F5;color:#0B1B26;padding:0;font-size:14px}
+  .c .band{background:#0D2B4A;color:#fff;padding:16px 34px;display:flex;align-items:center;justify-content:space-between}
+  .c .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}
+  .c .mark{width:26px;height:26px;background:#0E8A8F;display:flex;align-items:center;justify-content:center;border-radius:4px}
+  .c nav{display:flex;gap:18px;font-size:12px;color:#B9C8D4}
+  .c .body{padding:26px 34px 32px}
+  .c .hero{display:flex;justify-content:space-between;align-items:flex-end;gap:30px}
+  .c .kick{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0E8A8F}
+  .c h3{font-size:38px;letter-spacing:-.03em;line-height:1.02;margin:6px 0 0;font-weight:800}
+  .c .sub{color:#4A5C6B;margin-top:8px;font-size:14px;max-width:560px}
+  .c .now{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#4A5C6B;text-align:right}
+  .c .now b{display:block;font-size:20px;color:#0B1B26}
+  .c .tbl{margin-top:24px;border:1px solid #C9D4DB;background:#fff}
+  .c .th{display:grid;grid-template-columns:1fr 130px 110px 120px;gap:12px;padding:8px 14px;background:#E4EAEE;
+    font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#4A5C6B}
+  .c .row{display:grid;grid-template-columns:1fr 130px 110px 120px;gap:12px;padding:11px 14px;border-top:1px solid #DCE4E9;align-items:center}
+  .c .nm{font-weight:700;font-size:14.5px}
+  .c .sm{font-size:11px;color:#6B7C8C}
+  .c .v{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .c .st{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-align:right}
+  .c .ok{color:#2F6B1F}
+  .c .warn{color:#8A5B12}
+  .c .bad{color:#A8441F}
+  .c .foot{display:flex;gap:16px;margin-top:12px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:#4A5C6B}
+
+  /* ---------- D · rustig product ---------- */
+  .d{background:#FFFFFF;color:#111827;padding:38px 46px 42px;font-size:14.5px}
+  .d .top{display:flex;align-items:center;justify-content:space-between}
+  .d .brand{font-weight:700;letter-spacing:-.01em;font-size:17px}
+  .d .brand span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#111827;margin-right:8px}
+  .d nav{display:flex;gap:20px;font-size:12.5px;color:#6B7280}
+  .d .hero{margin-top:44px;max-width:620px}
+  .d .kick{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6B7280;font-weight:700}
+  .d h3{font-size:42px;letter-spacing:-.035em;line-height:1.03;margin:10px 0 0;font-weight:700}
+  .d .sub{color:#6B7280;margin-top:12px;font-size:15.5px;line-height:1.55}
+  .d .cta{margin-top:20px;font-size:13.5px;font-weight:600;border-bottom:1px solid #111827;display:inline-block;padding-bottom:1px}
+  .d .list{margin-top:40px;border-top:1px solid #E5E7EB}
+  .d .row{display:grid;grid-template-columns:1fr 120px 90px;gap:16px;padding:14px 0;border-bottom:1px solid #E5E7EB;align-items:center}
+  .d .nm{font-weight:600;font-size:14.5px}
+  .d .sm{font-size:11.5px;color:#9CA3AF}
+  .d .v{font-size:12px;color:#6B7280;text-align:right}
+  .d .dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px}
+  .d .ok{background:#4C7A34}.d .warn{background:#E8A33C}.d .bad{background:#A8441F}
+  .d .foot{margin-top:20px;font-size:10.5px;color:#9CA3AF;letter-spacing:.06em;text-transform:uppercase}
+
+  .compare{width:100%;border-collapse:collapse;margin-top:40px;font-size:14px;background:#fff;
+    border:1px solid #D5DDE3;border-radius:12px;overflow:hidden}
+  .compare th{text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6B7C8C;
+    padding:12px 14px;background:#F4F1EC;border-bottom:1px solid #D5DDE3}
+  .compare td{padding:12px 14px;border-bottom:1px solid #E7E2D9;color:#46617D;vertical-align:top}
+  .compare td:first-child{color:#0D2B4A;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">CycladesGo · merkrichtingen</div>
+  <h1>Vier richtingen,<br>één inhoud.</h1>
+  <p class="lede">Dezelfde hero, dezelfde eilandrij, dezelfde waarheid — vier verschillende
+  karakters. Kies op gevoel; de tokens en regels eronder blijven gelijk.</p>
+
+  <!-- A -->
+  <div class="opt" id="o1">
+    <div class="head"><h2>A · Papier &amp; inkt</h2><span class="no">01 / huidig</span></div>
+    <p class="why"><b>Wat het is:</b> de site zoals hij nu is. Warm papier, één blauw accent,
+    sans-serif, veel lucht. <b>Waarom:</b> leest als een instrument, niet als een etalage.
+    <b>Zwak:</b> het blauw is veilig en de eilandrij kan op een generic SaaS-lijst lijken.</p>
+    <div class="frame">
+      <div class="a">
+        <div class="top">
+          <div class="brand"><span class="mark">▤</span> CycladesGo</div>
+          <nav><span>Islands</span><span>Guides</span><span>How it works</span><span>Our data</span></nav>
+        </div>
+        <div class="hero">
+          <div class="kick">Cyclades · 5 islands</div>
+          <h3>The Cyclades by bus</h3>
+          <div class="sub">Bus times that work when your phone does not. The operator's published timetable, dated — never "live".</div>
+          <div class="btns"><span class="btn">Pick your island →</span><span class="btn ghost">How we get our data</span></div>
+        </div>
+        <div class="list">
+          <div class="row"><span class="dome">5</span><div><div class="nm">NaxosGo</div><div class="sm">55 stops · 112 journeys · KTEL Naxos</div></div><span class="push bdg ok">Verified 6 Nov</span></div>
+          <div class="row"><span class="dome" style="background:#B4502E">14</span><div><div class="nm">ParosGo</div><div class="sm">25 stops · 84 journeys · KTEL Paros</div></div><span class="push bdg bad">Expired 18 Oct</span></div>
+          <div class="row"><span class="dome" style="background:#6B4E9B">7</span><div><div class="nm">MilosGo</div><div class="sm">19 stops · 52 journeys · Milos Buses</div></div><span class="push bdg warn">Expires in 3 days</span></div>
+        </div>
+        <div class="chips"><span>◯ Unofficial</span><span>◷ Scheduled, never live</span><span>⛁ Open data</span><span>⊘ No tracking</span></div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag">veilig</span><span class="tag g">snel te bouwen</span></div>
+  </div>
+
+  <!-- B -->
+  <div class="opt" id="o2">
+    <div class="head"><h2>B · Archief</h2><span class="no">02</span></div>
+    <p class="why"><b>Wat het is:</b> een gedrukt dienstregelingsboek. Serif-koppen, hairline-regels,
+    nummers als Romeinse telling, terracotta in plaats van blauw. <b>Waarom:</b> het maakt
+    "gepubliceerde dienstregeling" letterlijk voelbaar — dit is een archiefstuk, geen app.
+    <b>Zwak:</b> minder geschikt voor de drukke planner; serif op mobiel kan zwaar worden.</p>
+    <div class="frame">
+      <div class="b">
+        <div class="top">
+          <div class="brand">CycladesGo<span>The Cyclades by bus · est. 2026</span></div>
+          <nav><span>Islands</span><span>Guides</span><span>Data</span><span>About</span></nav>
+        </div>
+        <div class="hero">
+          <div>
+            <div class="kick">No. 01 · Published timetable</div>
+            <h3>The Cyclades<br>by bus</h3>
+            <div class="sub">Five islands, thirty-seven lines, three hundred and sixteen journeys.
+            Every time is the operator's own, with the date we retrieved it.</div>
+          </div>
+          <div class="aside">
+            <b>Verified</b>
+            Naxos · 6 Nov 2026<br>
+            Paros · 18 Oct 2026<br>
+            Milos · 11 Oct 2026
+          </div>
+        </div>
+        <div class="list">
+          <div class="row"><span class="num">I.</span><div><div class="nm">Naxos</div><div class="sm">KTEL Naxos · 55 stops · 5 lines</div></div><div class="sm">112 journeys</div><div class="vd ok">06.11.26</div></div>
+          <div class="row"><span class="num">II.</span><div><div class="nm">Paros</div><div class="sm">KTEL Paros · 25 stops · 14 lines</div></div><div class="sm">84 journeys</div><div class="vd bad">18.10.26</div></div>
+          <div class="row"><span class="num">III.</span><div><div class="nm">Milos</div><div class="sm">Milos Buses · 19 stops · 7 lines</div></div><div class="sm">52 journeys</div><div class="vd warn">11.10.26</div></div>
+        </div>
+        <div class="foot">Not affiliated with KTEL · Scheduled, never live · OpenStreetMap ODbL</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag t">meer karakter</span><span class="tag">redactioneel</span></div>
+  </div>
+
+  <!-- C -->
+  <div class="opt" id="o3">
+    <div class="head"><h2>C · Havenbord</h2><span class="no">03</span></div>
+    <p class="why"><b>Wat het is:</b> een vertrekbord. Donkere band, mono-cijfers, tabel met
+    kolommen, vierkante hoeken, hoge contrast. <b>Waarom:</b> dit is de meest eerlijke vorm —
+    het leest als een bord in de haven, niet als een website. <b>Zwak:</b> koud; minder
+    uitnodigend voor de gidsen en het trust-verhaal.</p>
+    <div class="frame">
+      <div class="c">
+        <div class="band">
+          <div class="brand"><span class="mark">▤</span> CYCLADESGO</div>
+          <nav><span>Islands</span><span>Guides</span><span>Data</span><span>Status</span></nav>
+        </div>
+        <div class="body">
+          <div class="hero">
+            <div>
+              <div class="kick">Departures · published schedule</div>
+              <h3>The Cyclades by bus</h3>
+              <div class="sub">Five islands. Every time comes from the operator, with the date we checked it. No live data, no tracking.</div>
+            </div>
+            <div class="now">last verified<b>02.11.26</b></div>
+          </div>
+          <div class="tbl">
+            <div class="th"><span>Island</span><span>Operator</span><span>Valid to</span><span>Status</span></div>
+            <div class="row"><div><div class="nm">NAXOS</div><div class="sm">55 stops · 5 lines</div></div><div class="v">KTEL Naxos</div><div class="v">06.11.26</div><div class="st ok">OK</div></div>
+            <div class="row"><div><div class="nm">PAROS</div><div class="sm">25 stops · 14 lines</div></div><div class="v">KTEL Paros</div><div class="v">18.10.26</div><div class="st bad">EXPIRED</div></div>
+            <div class="row"><div><div class="nm">MILOS</div><div class="sm">19 stops · 7 lines</div></div><div class="v">Milos Buses</div><div class="v">11.10.26</div><div class="st warn">3 DAYS</div></div>
+          </div>
+          <div class="foot"><span>UNOFFICIAL</span><span>SCHEDULED · NEVER LIVE</span><span>OSM ODbL</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag t">meest eerlijk</span><span class="tag">utiliteit</span></div>
+  </div>
+
+  <!-- D -->
+  <div class="opt" id="o4">
+    <div class="head"><h2>D · Rustig product</h2><span class="no">04</span></div>
+    <p class="why"><b>Wat het is:</b> wit, zwart, één groene punt per status. Geen accentkleur,
+    geen kaarten, geen schaduw. <b>Waarom:</b> maximale rust en de laagste "template"-factor;
+    het voelt als een goedgemaakt hulpmiddel. <b>Zwak:</b> minder eigen karakter; de zee
+    verdwijnt uit het merk.</p>
+    <div class="frame">
+      <div class="d">
+        <div class="top">
+          <div class="brand"><span></span>CycladesGo</div>
+          <nav><span>Islands</span><span>Guides</span><span>Data</span><span>About</span></nav>
+        </div>
+        <div class="hero">
+          <div class="kick">Cyclades · five islands</div>
+          <h3>The Cyclades by bus</h3>
+          <div class="sub">Bus times that work when your phone does not. Every time is the
+          operator's published schedule, with the date we checked it.</div>
+          <div class="cta">Pick your island →</div>
+        </div>
+        <div class="list">
+          <div class="row"><div><div class="nm">Naxos</div><div class="sm">KTEL Naxos · 55 stops</div></div><div class="v">valid to 6 Nov</div><div class="v"><span class="dot ok"></span></div></div>
+          <div class="row"><div><div class="nm">Paros</div><div class="sm">KTEL Paros · 25 stops</div></div><div class="v">expired 18 Oct</div><div class="v"><span class="dot bad"></span></div></div>
+          <div class="row"><div><div class="nm">Milos</div><div class="sm">Milos Buses · 19 stops</div></div><div class="v">expires in 3 days</div><div class="v"><span class="dot warn"></span></div></div>
+        </div>
+        <div class="foot">Unofficial · scheduled, never live · open data</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag g">rustigst</span><span class="tag t">minst eigen</span></div>
+  </div>
+
+  <table class="compare">
+    <tr><th>Richting</th><th>Past bij</th><th>Kost</th><th>Risico</th></tr>
+    <tr><td>A · Papier &amp; inkt</td><td>vertrouwen, snelheid, bestaande code</td><td>niets — dit is de huidige site</td><td>veilig, kan generiek aanvoelen</td></tr>
+    <tr><td>B · Archief</td><td>het "gepubliceerde dienstregeling"-verhaal, gidsen, rust</td><td>nieuwe typografie + serif-fallback, ~1 dag</td><td>mobiel zwaar, planner minder scanbaar</td></tr>
+    <tr><td>C · Havenbord</td><td>utiliteit, hoge contrast, vertrekbord-gevoel</td><td>nieuwe componenten, ~2 dagen</td><td>koud; gidsen en trust-verhaal lijden</td></tr>
+    <tr><td>D · Rustig product</td><td>minimalisme, lage template-factor</td><td>weinig, maar kleur ontwerpen</td><td>verliest de zee en het merk</td></tr>
+  </table>
+</div>
+<script>const q=new URLSearchParams(location.search);const o=q.get("o");if(o){document.querySelectorAll(".opt").forEach((el,i)=>{if(i+1!==Number(o))el.style.display="none"});document.querySelector("h1").style.display="none";document.querySelector(".lede").style.display="none";document.querySelector("h1").nextElementSibling;document.querySelector(".wrap").style.paddingTop="24px";document.querySelector("table.compare")&&(document.querySelector("table.compare").style.display="none")}</script>
+</body>
+</html>
