@@ -12,6 +12,7 @@
     --sun:#E8A33C; --sun-ink:#8A5B12; --sun-bg:#FBF3E2;
     --olive:#4C7A34; --olive-bg:#E9F2E3;
     --terra:#A8441F; --terra-bg:#F9EAE4;
+    --color-ink: #0D2B4A; --color-ink-soft: #46617D; --color-aegean: #1268B3;
     --r-sm:6px; --r-md:10px; --r-lg:16px;
     --shadow:0 1px 1px rgba(20,48,77,.10), 0 8px 24px rgba(20,48,77,.08);
   }
@@ -33,7 +34,7 @@
   .lang{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 11px;font-size:12px;color:#E6EEF5}
 
   /* hero */
-  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;padding:56px 0 46px}
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start;padding:56px 0 46px}
   .eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sea);font-weight:800}
   h1{font-size:54px;line-height:1.02;letter-spacing:-.035em;margin:12px 0 0;font-weight:800}
   .hy{color:var(--aegean)}
@@ -101,6 +102,101 @@
   .road-dash{animation:dash 1.2s linear infinite}
   .sun{animation:sunpulse 6s ease-in-out infinite}
   @media (prefers-reduced-motion: reduce){ .bus,.bus .bob,.bus .wheel,.road-dash,.sun{animation:none} }
+
+  .sea-loader{position:relative;overflow:hidden;background:#ffd69b}
+  .sea-loader--redirect{position:fixed;inset:0;z-index:100;display:grid;place-items:center}
+  .sea-loader--boot{position:fixed;inset:0;z-index:90;transition:opacity .4s ease}
+  .sea-loader--boot.is-hidden{opacity:0;pointer-events:none}
+  .sea-loader__scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  .sea-loader__caption{
+    position:absolute;top:19%;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    text-align:center;z-index:2;pointer-events:none;
+    animation:nl-fadeUp .7s .15s ease both;
+  }
+  .sea-loader__brand{
+    font-size:clamp(2.2rem,8vw,3rem);font-weight:800;letter-spacing:-.03em;
+    color:var(--color-ink);line-height:1;
+  }
+  .sea-loader__text{font-size:clamp(.85rem,3.5vw,1rem);font-weight:500;color:var(--color-ink-soft)}
+  .sea-loader__progress{
+    width:100px;height:6px;border-radius:3px;background:rgba(11,34,57,.18);
+    overflow:hidden;margin-top:4px;
+  }
+  .sea-loader__progress-bar{
+    display:block;height:100%;width:100%;border-radius:3px;    background:var(--color-aegean);
+    transform-origin:left center;transform:scaleX(0);
+    animation:nl-fill 2s ease-in-out forwards;
+  }
+  .nl-dot{opacity:0;animation:nl-dotBlink 1.8s infinite}
+  .nl-dot2{animation-delay:.3s}
+  .nl-dot3{animation-delay:.6s}
+
+  .nl-scroll-mid{animation:nl-scrollX 6s linear infinite}
+  .nl-scroll-fg{animation:nl-scrollX 3.2s linear infinite}
+  .nl-road-dash{animation:nl-dashMove .42s linear infinite}
+  .nl-bus-bob{animation:nl-busBob 1.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center bottom}
+  .nl-wheel{animation:nl-spin .42s linear infinite;transform-box:fill-box;transform-origin:center}
+  .nl-sails{animation:nl-spin 14s linear infinite;transform-box:fill-box;transform-origin:center}
+  .nl-puff{animation:nl-puff 1.3s ease-out infinite;transform-box:fill-box;transform-origin:center;opacity:0}
+  .nl-puff2{animation-delay:.65s}
+  .nl-sun{animation:nl-sunPulse 5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .nl-cloudA{animation:nl-cloudA 55s linear infinite}
+  .nl-cloudB{animation:nl-cloudB 75s linear infinite;animation-delay:-25s}
+  .nl-glint{animation:nl-glint 2.8s ease-in-out infinite alternate}
+  .nl-glint2{animation:nl-glint 3.6s .8s ease-in-out infinite alternate-reverse}
+  .nl-boat{animation:nl-boatBob 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+
+  @keyframes nl-scrollX{from{transform:translateX(0)}to{transform:translateX(-400px)}}
+  @keyframes nl-dashMove{from{stroke-dashoffset:0}to{stroke-dashoffset:58}}
+  @keyframes nl-busBob{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-1.6px) rotate(-.35deg)}65%{transform:translateY(-.6px) rotate(.25deg)}}
+  @keyframes nl-spin{to{transform:rotate(360deg)}}
+  @keyframes nl-puff{0%{transform:translate(0,0) scale(.4);opacity:.45}100%{transform:translate(-26px,-12px) scale(1.7);opacity:0}}
+  @keyframes nl-sunPulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.05);opacity:1}}
+  @keyframes nl-cloudA{from{transform:translateX(-180px)}to{transform:translateX(460px)}}
+  @keyframes nl-cloudB{from{transform:translateX(-140px)}to{transform:translateX(520px)}}
+  @keyframes nl-glint{from{transform:translateX(0);opacity:.14}to{transform:translateX(7px);opacity:.4}}
+  @keyframes nl-boatBob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-2px) rotate(1.5deg)}}
+  @keyframes nl-fadeUp{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  @keyframes nl-fill{to{transform:scaleX(1)}}
+  @keyframes nl-dotBlink{0%{opacity:0}8%{opacity:1}92%{opacity:1}100%{opacity:0}}
+
+  @media (prefers-reduced-motion:reduce){
+    .nl-scroll-mid,.nl-scroll-fg,.nl-road-dash,.nl-bus-bob,.nl-wheel,.nl-sails,
+    .nl-puff,.nl-sun,.nl-cloudA,.nl-cloudB,.nl-glint,.nl-glint2,.nl-boat,.nl-dot{animation:none}
+    .sea-loader__progress-bar{animation:none;transform:scaleX(1)}
+    .nl-dot{opacity:1}
+  }
+
+  [data-theme="dark"] .sea-loader { background: #101B24; }
+  [data-theme="dark"] .nl-sky-day { stop-color: #101B24; }
+  [data-theme="dark"] .nl-sky-mid { stop-color: #182632; }
+  [data-theme="dark"] .nl-sky-low { stop-color: #20303D; }
+  [data-theme="dark"] .nl-sky-horizon { stop-color: #334655; }
+  [data-theme="dark"] .nl-sea-top { stop-color: #20303D; }
+  [data-theme="dark"] .nl-sea-mid { stop-color: #182632; }
+  [data-theme="dark"] .nl-sea-bot { stop-color: #101B24; }
+  [data-theme="dark"] .nl-land-top { stop-color: #20303D; }
+  [data-theme="dark"] .nl-land-bot { stop-color: #182632; }
+  [data-theme="dark"] .nl-road-top { stop-color: #20303D; }
+  [data-theme="dark"] .nl-road-bot { stop-color: #182632; }
+  [data-theme="dark"] .nl-fg-top { stop-color: #182632; }
+  [data-theme="dark"] .nl-fg-bot { stop-color: #101B24; }
+  [data-theme="dark"] .nl-sun-circle { fill: #F1EDE4; }
+  [data-theme="dark"] .nl-sun-glow { stop-color: #F1EDE4; }
+  [data-theme="dark"] .nl-bus-window { fill: #F2C069 !important; filter: drop-shadow(0 0 6px rgba(242,192,105,.5)); }
+  [data-theme="dark"] .nl-flame { animation: nl-flame 2.4s ease-in-out infinite; }
+
+  @keyframes nl-flame {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  .sea-card{position:relative;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 4px rgba(20,48,77,.10),0 18px 40px rgba(20,48,77,.12)}
+  .sea-loader--card{position:relative;inset:auto;width:100%;aspect-ratio:4/5;background:#ffd69b}
+  .sea-loader--card .sea-loader__brand{font-size:34px}
+  .sea-loader--card .sea-loader__text{font-size:13px}
 </style>
 </head>
 <body>
@@ -131,7 +227,7 @@
 
 <main class="wrap">
   <section class="hero">
-    <div>
+    <div style="padding-top:34px">
       <div class="eyebrow">Departures · published schedule</div>
       <h1>The Cyclades<br>by bus, <span class="hy">on time.</span></h1>
       <p class="lede">Five islands. Every time is the operator's own published timetable,
@@ -140,71 +236,280 @@
       <div class="stamp">Last verified <b>02.11.26</b> · 5 islands · 37 lines · 316 journeys</div>
     </div>
 
-    <div class="scene" aria-hidden="true">
-      <svg viewBox="0 0 640 320" role="presentation">
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#BFE0F0"/><stop offset=".62" stop-color="#F6E7C9"/><stop offset="1" stop-color="#F3D3A2"/>
-          </linearGradient>
-          <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#4FA3C9"/><stop offset="1" stop-color="#1E6C9A"/>
-          </linearGradient>
-          <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#5A544C"/><stop offset="1" stop-color="#433E38"/>
-          </linearGradient>
-          <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2E86C8"/><stop offset="1" stop-color="#1268B3"/>
-          </linearGradient>
-        </defs>
+    <div class="sea-card">
+      <div class="sea-loader sea-loader--card">
+<svg class="sea-loader__scene" viewBox="0 0 400 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="nl-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#7ec3e6" class="nl-sky-day"/>
+        <stop offset="50%" stop-color="#c3e2ef" class="nl-sky-mid"/>
+        <stop offset="75%" stop-color="#ffe9c2" class="nl-sky-low"/>
+        <stop offset="100%" stop-color="#ffd69b" class="nl-sky-horizon"/>
+      </linearGradient>
+      <radialGradient id="nl-sunGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffcf7a" stop-opacity=".6" class="nl-sun-glow"/>
+        <stop offset="100%" stop-color="#ffcf7a" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="nl-sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#54a8d4" class="nl-sea-top"/>
+        <stop offset="55%" stop-color="#2f7fb8" class="nl-sea-mid"/>
+        <stop offset="100%" stop-color="#1d5f96" class="nl-sea-bot"/>
+      </linearGradient>
+      <linearGradient id="nl-land" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#efd5a0" class="nl-land-top"/>
+        <stop offset="100%" stop-color="#e0bf85" class="nl-land-bot"/>
+      </linearGradient>
+      <linearGradient id="nl-road" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5a544c" class="nl-road-top"/>
+        <stop offset="100%" stop-color="#47423b" class="nl-road-bot"/>
+      </linearGradient>
+      <linearGradient id="nl-fg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e0c088" class="nl-fg-top"/>
+        <stop offset="100%" stop-color="#c9a268" class="nl-fg-bot"/>
+      </linearGradient>
+      <linearGradient id="nl-busBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="100%" stop-color="#f0ece0"/>
+      </linearGradient>
+      <linearGradient id="nl-glass" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#d3ebf9"/>
+        <stop offset="100%" stop-color="#a2cfe9"/>
+      </linearGradient>
+    </defs>
 
-        <rect width="640" height="190" fill="url(#sky)"/>
-        <circle class="sun" cx="512" cy="66" r="30" fill="#E8A33C"/>
-        <circle cx="512" cy="66" r="46" fill="#E8A33C" opacity=".16"/>
+    <!-- SKY -->
+    <rect x="0" y="0" width="400" height="265" fill="url(#nl-sky)"/>
 
-        <!-- heuvels -->
-        <path d="M0 190 C70 150 130 168 196 150 C258 134 300 160 360 148 C430 134 520 166 640 138 L640 200 L0 200 Z" fill="#6E8B5A" opacity=".55"/>
-        <path d="M0 200 C80 176 150 190 220 178 C300 164 360 186 440 176 C520 166 580 186 640 172 L640 214 L0 214 Z" fill="#4C7A34" opacity=".8"/>
+    <g class="nl-sun">
+      <circle cx="318" cy="88" r="58" fill="url(#nl-sunGlow)"/>
+      <circle cx="318" cy="88" r="26" fill="#ffd166" class="nl-sun-circle"/>
+      <circle cx="318" cy="88" r="20" fill="#ffdc85"/>
+    </g>
 
-        <!-- zee -->
-        <rect y="206" width="640" height="34" fill="url(#sea)"/>
-        <path d="M0 216 H640 M0 228 H640" stroke="#DCEFF7" stroke-width="1.4" opacity=".35"/>
-        <g opacity=".85">
-          <path d="M436 214 L470 214 L462 222 L444 222 Z" fill="#F7F1E4"/>
-          <path d="M452 214 L452 200 L464 214 Z" fill="#FAF7F2"/>
+    <g class="nl-cloudA" fill="#fffcf4" opacity=".85">
+      <ellipse cx="60" cy="78" rx="34" ry="10"/>
+      <ellipse cx="48" cy="71" rx="16" ry="10"/>
+      <ellipse cx="72" cy="69" rx="20" ry="12"/>
+    </g>
+    <g class="nl-cloudB" fill="#fffcf4" opacity=".55">
+      <ellipse cx="210" cy="128" rx="26" ry="8"/>
+      <ellipse cx="200" cy="122" rx="13" ry="8"/>
+      <ellipse cx="220" cy="121" rx="15" ry="9"/>
+    </g>
+
+    <!-- SEA -->
+    <rect x="0" y="255" width="400" height="105" fill="url(#nl-sea)"/>
+    <path d="M12 358 Q40 322 78 330 Q108 336 128 358 Z" fill="#cbb28e" opacity=".8"/>
+    <path d="M40 358 Q58 338 80 344 Q98 350 108 358 Z" fill="#bda17a" opacity=".7"/>
+
+    <g fill="#ffd9a0">
+      <rect class="nl-glint"  x="296" y="268" width="44" height="3" rx="1.5" opacity=".3"/>
+      <rect class="nl-glint2" x="302" y="282" width="32" height="3" rx="1.5" opacity=".25"/>
+      <rect class="nl-glint"  x="294" y="296" width="48" height="3" rx="1.5" opacity=".28"/>
+      <rect class="nl-glint2" x="300" y="310" width="34" height="3" rx="1.5" opacity=".22"/>
+      <rect class="nl-glint"  x="292" y="324" width="50" height="3" rx="1.5" opacity=".24"/>
+    </g>
+    <g fill="#ffffff">
+      <rect class="nl-glint2" x="40"  y="290" width="26" height="2.4" rx="1.2" opacity=".2"/>
+      <rect class="nl-glint"  x="150" y="315" width="30" height="2.4" rx="1.2" opacity=".18"/>
+      <rect class="nl-glint2" x="200" y="272" width="22" height="2.4" rx="1.2" opacity=".2"/>
+      <rect class="nl-glint"  x="70"  y="335" width="28" height="2.4" rx="1.2" opacity=".16"/>
+    </g>
+
+    <g class="nl-boat">
+      <path d="M70 300 L94 300 L89 307 L75 307 Z" fill="#fdf8ee"/>
+      <path d="M70 300 L94 300 L92 303 L72 303 Z" fill="#1d5fa8"/>
+      <line x1="82" y1="300" x2="82" y2="280" stroke="#8a7a5e" stroke-width="1.4"/>
+      <path d="M83 281 L83 298 L95 298 Z" fill="#ffffff"/>
+      <path d="M81 283 L81 298 L72 298 Z" fill="#f0e8d8"/>
+    </g>
+
+    <path d="M0 356 Q50 352 100 357 T200 356 T300 358 T400 355 L400 366 L0 366 Z" fill="#ffffff" opacity=".85"/>
+
+    <!-- LAND -->
+    <rect x="0" y="362" width="400" height="113" fill="url(#nl-land)"/>
+
+    <!-- TERRACED HILL + VILLAGE -->
+    <g>
+      <path d="M150 475 L150 452 Q150 430 172 430 L400 430 L400 475 Z" fill="#c8a06e"/>
+      <path d="M150 452 Q150 430 172 430 L400 430 L400 434 L176 434 Q158 434 154 452 Z" fill="#e8cf9f"/>
+      <path d="M185 430 L185 407 Q185 385 207 385 L400 385 L400 430 Z" fill="#cfa773"/>
+      <path d="M185 407 Q185 385 207 385 L400 385 L400 389 L211 389 Q193 389 189 407 Z" fill="#ecd5a6"/>
+      <path d="M215 385 L215 362 Q215 340 237 340 L400 340 L400 385 Z" fill="#c8a06e"/>
+      <path d="M215 362 Q215 340 237 340 L400 340 L400 344 L241 344 Q223 344 219 362 Z" fill="#e8cf9f"/>
+      <path d="M245 340 L245 317 Q245 295 267 295 L400 295 L400 340 Z" fill="#cfa773"/>
+      <path d="M245 317 Q245 295 267 295 L400 295 L400 299 L271 299 Q253 299 249 317 Z" fill="#ecd5a6"/>
+      <path d="M275 295 L275 272 Q275 250 297 250 L400 250 L400 295 Z" fill="#c8a06e"/>
+      <path d="M275 272 Q275 250 297 250 L400 250 L400 254 L301 254 Q283 254 279 272 Z" fill="#e8cf9f"/>
+      <path d="M300 250 L300 232 Q300 214 318 214 L400 214 L400 250 Z" fill="#cfa773"/>
+      <path d="M300 232 Q300 214 318 214 L400 214 L400 218 L322 218 Q306 218 304 232 Z" fill="#ecd5a6"/>
+
+      <g>
+        <rect x="162" y="404" width="30" height="26" fill="#fdf8ee"/>
+        <rect x="186" y="404" width="6" height="26" fill="#e8d9bd"/>
+        <rect x="168" y="410" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="178" y="416" width="7" height="14" rx="2" fill="#1d4e89"/>
+        <rect x="200" y="408" width="26" height="22" fill="#fffdf6"/>
+        <rect x="220" y="408" width="6" height="22" fill="#e8d9bd"/>
+        <path d="M200 408 L213 398 L226 408 Z" fill="#c1502e"/>
+        <rect x="206" y="414" width="6" height="7" fill="#2a6fb5"/>
+      </g>
+
+      <g>
+        <rect x="196" y="357" width="32" height="28" fill="#fdf8ee"/>
+        <rect x="222" y="357" width="6" height="28" fill="#e8d9bd"/>
+        <rect x="202" y="364" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="212" y="364" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="206" y="374" width="8" height="11" rx="2" fill="#1d4e89"/>
+        <circle cx="198" cy="362" r="3" fill="#c95a8a"/>
+        <circle cx="201" cy="358" r="2.6" fill="#d46a98"/>
+        <circle cx="196" cy="367" r="2.4" fill="#c95a8a"/>
+        <rect x="236" y="361" width="26" height="24" fill="#fffdf6"/>
+        <rect x="256" y="361" width="6" height="24" fill="#e8d9bd"/>
+        <rect x="242" y="367" width="6" height="7" fill="#2a6fb5"/>
+        <rect x="251" y="367" width="6" height="7" fill="#2a6fb5"/>
+      </g>
+
+      <g>
+        <rect x="226" y="312" width="30" height="28" fill="#fdf8ee"/>
+        <rect x="250" y="312" width="6" height="28" fill="#e8d9bd"/>
+        <rect x="232" y="319" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="240" y="326" width="8" height="14" rx="2" fill="#1d4e89"/>
+        <path d="M288 340 L292 306 L306 306 L310 340 Z" fill="#f7f1e4"/>
+        <path d="M306 306 L310 340 L303 340 Z" fill="#e4d8bd"/>
+        <path d="M289 306 L299 294 L309 306 Z" fill="#a98558"/>
+        <g class="nl-sails" stroke="#8a7a5e" stroke-width="2">
+          <line x1="299" y1="282" x2="299" y2="318"/>
+          <line x1="281" y1="300" x2="317" y2="300"/>
         </g>
+        <circle cx="299" cy="300" r="2.4" fill="#6b5a3e"/>
+      </g>
 
-        <!-- weg -->
-        <rect y="240" width="640" height="80" fill="url(#road)"/>
-        <rect y="240" width="640" height="2.5" fill="#E8E2D2" opacity=".55"/>
-        <line class="road-dash" x1="0" y1="286" x2="640" y2="286" stroke="#E8A33C" stroke-width="4" stroke-dasharray="26 22" opacity=".85"/>
+      <g>
+        <rect x="256" y="268" width="30" height="27" fill="#fffdf6"/>
+        <rect x="280" y="268" width="6" height="27" fill="#e8d9bd"/>
+        <rect x="262" y="274" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="270" y="282" width="8" height="13" rx="2" fill="#1d4e89"/>
+        <rect x="296" y="266" width="34" height="29" fill="#ffffff"/>
+        <rect x="323" y="266" width="7" height="29" fill="#eee4cf"/>
+        <path d="M296 266 A17 15 0 0 1 330 266 Z" fill="#2e6fb0"/>
+        <line x1="313" y1="246" x2="313" y2="257" stroke="#fdf8ee" stroke-width="2"/>
+        <line x1="308" y1="251" x2="318" y2="251" stroke="#fdf8ee" stroke-width="2"/>
+        <rect x="308" y="280" width="9" height="15" rx="4" fill="#1d4e89"/>
+      </g>
 
-        <!-- bus -->
-        <g class="bus" transform="translate(60 0)">
-          <g class="bob">
-            <ellipse cx="86" cy="300" rx="72" ry="4" fill="#000" opacity=".18"/>
-            <rect x="8" y="258" width="156" height="34" rx="8" fill="url(#body)"/>
-            <rect x="8" y="276" width="156" height="7" fill="#0D2B4A" opacity=".9"/>
-            <rect x="8" y="254" width="156" height="5" rx="2.5" fill="#7CB9EA"/>
-            <g fill="#FAF7F2">
-              <rect x="18" y="262" width="24" height="11" rx="2"/>
-              <rect x="48" y="262" width="24" height="11" rx="2"/>
-              <rect x="78" y="262" width="24" height="11" rx="2"/>
-              <rect x="108" y="262" width="20" height="12" rx="2"/>
-            </g>
-            <rect x="136" y="262" width="22" height="12" rx="2" fill="#FAF7F2"/>
-            <circle cx="156" cy="283" r="2.4" fill="#E8A33C"/>
-            <g class="wheel" style="transform-origin:38px 292px">
-              <circle cx="38" cy="292" r="9" fill="#0D2B4A"/><circle cx="38" cy="292" r="3.2" fill="#FAF7F2"/>
-              <path d="M38 284 V300 M30 292 H46" stroke="#FAF7F2" stroke-width="1.6"/>
-            </g>
-            <g class="wheel" style="transform-origin:134px 292px">
-              <circle cx="134" cy="292" r="9" fill="#0D2B4A"/><circle cx="134" cy="292" r="3.2" fill="#FAF7F2"/>
-              <path d="M134 284 V300 M126 292 H142" stroke="#FAF7F2" stroke-width="1.6"/>
-            </g>
-            <text x="18" y="252" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="#FAF7F2" opacity=".75">KTEL · CYCLADES</text>
-          </g>
+      <g>
+        <rect x="286" y="222" width="30" height="28" fill="#fdf8ee"/>
+        <rect x="310" y="222" width="6" height="28" fill="#e8d9bd"/>
+        <rect x="292" y="229" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="300" y="229" width="7" height="8" fill="#2a6fb5"/>
+        <rect x="322" y="218" width="40" height="32" fill="#ffffff"/>
+        <rect x="354" y="218" width="8" height="32" fill="#eee4cf"/>
+        <path d="M322 218 A20 17 0 0 1 362 218 Z" fill="#1d5fa8"/>
+        <line x1="342" y1="196" x2="342" y2="208" stroke="#fdf8ee" stroke-width="2.2"/>
+        <line x1="336" y1="202" x2="348" y2="202" stroke="#fdf8ee" stroke-width="2.2"/>
+        <rect x="336" y="234" width="11" height="16" rx="5" fill="#1d4e89"/>
+        <rect x="370" y="222" width="16" height="28" fill="#fdf8ee"/>
+        <path d="M370 222 L378 212 L386 222 Z" fill="#c1502e"/>
+        <circle cx="378" cy="230" r="3" fill="#2a6fb5"/>
+      </g>
+
+      <ellipse cx="250" cy="430" rx="8" ry="3" fill="#7c8a4e" opacity=".8"/>
+      <ellipse cx="290" cy="385" rx="7" ry="3" fill="#7c8a4e" opacity=".7"/>
+      <ellipse cx="320" cy="340" rx="7" ry="3" fill="#8a9a58" opacity=".7"/>
+      <ellipse cx="350" cy="295" rx="7" ry="3" fill="#7c8a4e" opacity=".7"/>
+    </g>
+
+    <!-- MIDGROUND (scrolling) -->
+    <g class="nl-scroll-mid">
+      <g id="nl-midContent">
+        <path d="M40 475 C33 455 34 435 40 422 C46 435 47 455 40 475 Z" fill="#3f5a36"/>
+        <path d="M40 475 C36 457 36 437 40 422 C42 432 42 457 40 475 Z" fill="#4d6b40"/>
+        <line x1="105" y1="475" x2="105" y2="452" stroke="#8a8378" stroke-width="2"/>
+        <rect x="97" y="443" width="16" height="10" rx="2" fill="#2a6fb5"/>
+        <path d="M165 475 C157 453 158 431 165 417 C172 431 173 453 165 475 Z" fill="#3a5431"/>
+        <path d="M165 475 C161 455 161 433 165 417 C167 428 167 455 165 475 Z" fill="#48653c"/>
+        <rect x="255" y="455" width="18" height="20" fill="#fdf8ee"/>
+        <path d="M255 455 A9 7 0 0 1 273 455 Z" fill="#2a6fb5"/>
+        <rect x="261" y="466" width="6" height="9" rx="3" fill="#1d4e89"/>
+        <path d="M330 475 C323 457 324 439 330 427 C336 439 337 457 330 475 Z" fill="#3f5a36"/>
+      </g>
+      <use href="#nl-midContent" x="400"/>
+    </g>
+
+    <!-- ROAD -->
+    <rect x="0" y="470" width="400" height="125" fill="url(#nl-road)"/>
+    <rect x="0" y="470" width="400" height="3" fill="#7a736a"/>
+    <rect x="0" y="477" width="400" height="2.5" fill="#e8e2d2" opacity=".75"/>
+    <rect x="0" y="588" width="400" height="2.5" fill="#e8e2d2" opacity=".5"/>
+    <line class="nl-road-dash" x1="0" y1="532" x2="400" y2="532" stroke="#ffd166" stroke-width="5" stroke-dasharray="32 26"/>
+
+    <!-- BUS -->
+    <g transform="translate(108,478)">
+      <g class="nl-bus-bob">
+        <ellipse cx="95" cy="97" rx="86" ry="5" fill="#000" opacity=".18"/>
+        <circle class="nl-puff" cx="6" cy="74" r="4.5" fill="#c9c4ba"/>
+        <circle class="nl-puff nl-puff2" cx="6" cy="72" r="3.5" fill="#d4cfc4"/>
+        <rect x="30" y="8" width="110" height="7" rx="3.5" fill="#dcd6c8"/>
+        <rect x="10" y="14" width="172" height="62" rx="10" fill="url(#nl-busBody)" stroke="#d8d2c2" stroke-width="1"/>
+        <path d="M10 54 H182 V66 Q182 76 172 76 H20 Q10 76 10 66 Z" fill="#1d5fa8"/>
+        <rect x="10" y="50" width="172" height="4" fill="#7db8e6"/>
+        <rect x="8" y="70" width="176" height="6" rx="3" fill="#33333d"/>
+        <g stroke="#1d4e89" stroke-width="1.5">
+          <rect x="20" y="22" width="26" height="18" rx="3" fill="url(#nl-glass)" class="nl-bus-window"/>
+          <rect x="52" y="22" width="26" height="18" rx="3" fill="url(#nl-glass)" class="nl-bus-window"/>
+          <rect x="84" y="22" width="26" height="18" rx="3" fill="url(#nl-glass)" class="nl-bus-window"/>
+          <rect x="116" y="22" width="26" height="18" rx="3" fill="url(#nl-glass)" class="nl-bus-window"/>
         </g>
-      </svg>
+        <rect x="150" y="20" width="26" height="28" rx="5" fill="url(#nl-glass)" stroke="#1d4e89" stroke-width="2" class="nl-bus-window"/>
+        <rect x="152" y="14.5" width="22" height="5" rx="1.5" fill="var(--color-ink)"/>
+        <line x1="176" y1="24" x2="183" y2="19" stroke="#1d4e89" stroke-width="2"/>
+        <rect x="181" y="15" width="3.5" height="5.5" rx="1.5" fill="#1d4e89"/>
+        <rect x="96" y="54" width="16" height="21" fill="#164a85"/>
+        <line x1="104" y1="54" x2="104" y2="75" stroke="#0f3a6b" stroke-width="1"/>
+        <circle cx="179" cy="58" r="4" fill="#ffd97a" stroke="#d98e1f" stroke-width="1.4"/>
+        <rect x="8" y="56" width="4" height="8" rx="2" fill="#d9534f"/>
+        <g class="nl-wheel">
+          <circle cx="142" cy="83" r="13" fill="#26262e"/>
+          <circle cx="142" cy="83" r="8" fill="#d7dde4"/>
+          <circle cx="142" cy="83" r="3" fill="#7c8794"/>
+          <line x1="142" y1="75" x2="142" y2="91" stroke="#9aa5b1" stroke-width="1.6"/>
+          <line x1="134" y1="83" x2="150" y2="83" stroke="#9aa5b1" stroke-width="1.6"/>
+        </g>
+        <g class="nl-wheel">
+          <circle cx="46" cy="83" r="13" fill="#26262e"/>
+          <circle cx="46" cy="83" r="8" fill="#d7dde4"/>
+          <circle cx="46" cy="83" r="3" fill="#7c8794"/>
+          <line x1="46" y1="75" x2="46" y2="91" stroke="#9aa5b1" stroke-width="1.6"/>
+          <line x1="38" y1="83" x2="54" y2="83" stroke="#9aa5b1" stroke-width="1.6"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- FOREGROUND (scrolling) -->
+    <rect x="0" y="595" width="400" height="125" fill="url(#nl-fg)"/>
+    <g class="nl-scroll-fg">
+      <g id="nl-fgContent">
+        <ellipse cx="55" cy="645" rx="26" ry="15" fill="#7c8a4e"/>
+        <ellipse cx="48" cy="640" rx="14" ry="9" fill="#8a9a58"/>
+        <ellipse cx="66" cy="649" rx="10" ry="6" fill="#6b7a42"/>
+        <path d="M140 672 Q146 658 158 660 Q170 662 168 672 Z" fill="#b9a98e"/>
+        <g stroke="#8a9a55" stroke-width="2" fill="none" stroke-linecap="round">
+          <path d="M225 632 Q222 620 218 614"/>
+          <path d="M227 632 Q227 618 227 610"/>
+          <path d="M229 632 Q233 620 237 615"/>
+        </g>
+        <ellipse cx="310" cy="686" rx="32" ry="18" fill="#6b7a42"/>
+        <ellipse cx="300" cy="680" rx="16" ry="10" fill="#7c8a4e"/>
+        <circle cx="306" cy="676" r="1.6" fill="#fdf8ee"/>
+        <circle cx="318" cy="682" r="1.6" fill="#fdf8ee"/>
+        <path d="M370 645 Q374 637 381 638 Q388 640 386 646 Z" fill="#b9a98e"/>
+      </g>
+      <use href="#nl-fgContent" x="400"/>
+    </g>
+  </svg>
+        
+      </div>
     </div>
   </section>
 
